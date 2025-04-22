@@ -1,4 +1,5 @@
 ﻿@model Application.DTOs.Authentication.RegisterDto
+@using Domain.Common
 @using Domain.Enum
 
 <form asp-action="Register" method="post">
@@ -37,15 +38,18 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger" />
     </div>
 
-    <div class="form-group">
-        <label asp-for="Role" class="form-label"></label>
-        <select asp-for="Role"
-                class="form-control"
-                asp-items="Html.GetEnumSelectList<RoleEnum>()">
-            <option value="">-- Select Role --</option>
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
+    @if (User.IsInRole(ApiConsts.AdminRoleName))
+    {
+        <div class="form-group">
+            <label asp-for="Role" class="form-label"></label>
+            <select asp-for="Role"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<RoleEnum>()">
+                <option value=""> Select Role </option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+    }
 
     <div class="form-group">
         <label asp-for="Address" class="form-label"></label>

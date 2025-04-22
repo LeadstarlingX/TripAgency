@@ -8,7 +8,7 @@ namespace Application.DTOs.Contact
 {
 
     public class ContactDto : ContactTypeDto
-    {
+    {        
         public required string Value { get; set; }
     }
 

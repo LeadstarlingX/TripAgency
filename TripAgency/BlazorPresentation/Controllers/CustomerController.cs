@@ -29,29 +29,11 @@ namespace WebAPI.Controllers
         [Authorize(DefaultSetting.AdminRoleName)]
         public IActionResult Create()
         {
-            return View();
+            return RedirectToAction("Register", "Auth");
         }
 
 
-        [HttpPost]
-        [Authorize(DefaultSetting.AdminRoleName)]
-        public async Task<IActionResult> Create(CreateCustomerDto dto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return View(dto);
-
-                await _customerService.CreateCustomerAsync(dto);
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex) 
-            {
-                if(ex.Message == "Customer not found" )
-                return RedirectToAction("Register","Auth");
-            }
-            throw new Exception("Error");
-        }
+        
 
         // GET: /Customers/UpdateCustomer/1
         //[HttpGet("{id}")]

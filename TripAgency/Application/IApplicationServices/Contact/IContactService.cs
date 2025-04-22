@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Common;
 using Application.DTOs.Contact;
+using DataAccessLayer.Enum;
 using Domain.Entities;
 using Domain.Entities.ApplicationEntities;
 
@@ -12,5 +13,6 @@ namespace Application.IApplicationServices.Contact
         Task DeleteContactAsync(BaseDto<int> baseDto);
         Task<ContactTypesDto> GetContactTypesAsync();
         Task<ContactType> GetContactTypeByIdAsync(int id);
+        Task<ContactType> GetContactByTypeAsync(ContactTypeEnum contactType);
     }
 }

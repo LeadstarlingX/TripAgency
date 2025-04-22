@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using Application.IApplicationServices.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Application.IApplicationServices.Customer;
+using Domain.Entities.IdentityEntities;
+using Application.IApplicationServices.Contact;
+using Infrastructure.Extension;
 
 namespace Infrastructure.ApplicationServices.Customer
 {
@@ -18,15 +21,21 @@ namespace Infrastructure.ApplicationServices.Customer
         private readonly IAppRepository<Domain.Entities.ApplicationEntities.Customer> _customerRepository;
         private readonly IAppRepository<CustomerContact> _customerContactRepository;
         private readonly IAuthenticationService _authenticationService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IContactTypeService _contactTypeService;
 
         public CustomerService(
             IAppRepository<Domain.Entities.ApplicationEntities.Customer> customerRepository,
             IAppRepository<CustomerContact> customerContactRepository,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService,
+            UserManager<ApplicationUser> userManager,
+             IContactTypeService contactTypeService)
         {
             _customerRepository = customerRepository;
             _customerContactRepository = customerContactRepository;
             _authenticationService = authenticationService;
+            _userManager = userManager;
+            _contactTypeService = contactTypeService;
         }
 
         public async Task<CustomersDto> GetCustomersAsync()
@@ -40,7 +49,7 @@ namespace Infrastructure.ApplicationServices.Customer
 
         public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto dto)
         {
-            var customerAsUser = (await _authenticationService.GetAuthenticatedUser())??throw new Exception("Custoemr not found");
+            var customerAsUser = await _userManager.FindByEmailAsync(dto.Email)??throw new Exception("User not found");
             var customer = new Domain.Entities.ApplicationEntities.Customer()
             {
                 UserId = customerAsUser.Id,
@@ -50,13 +59,19 @@ namespace Infrastructure.ApplicationServices.Customer
 
             if (dto.Contacts is not null && !dto.Contacts.Contacts.Any())
             {
-                customer.Contacts = dto.Contacts.Contacts.Select(c => new CustomerContact
+                customer.Contacts = dto.Contacts.Contacts.Select( c => new CustomerContact
                 {
                     CustomerId = customerAsUser.Id,
                     Value = c.Value,
                     ContactTypeId = c.Id,
                 }).ToList();
             }
+            customer.Contacts.Add(new CustomerContact()
+            {
+                CustomerId = customerAsUser.Id,
+                Value = dto.Email,
+                ContactTypeId = (_contactTypeService.GetContactByTypeAsync(DataAccessLayer.Enum.ContactTypeEnum.Email).GetAwaiter().GetResult()).Id,
+            });
 
             var created = await _customerRepository.InsertAsync(customer);
             return MapToDto(created);
@@ -104,13 +119,11 @@ namespace Infrastructure.ApplicationServices.Customer
 
         public async Task<CustomerDto> UpdateCustomerContactsAsync()
         {
-            // This requires contact data - consider modifying the method signature
             throw new NotImplementedException("Contact data required for update");
         }
 
         public async Task<CustomerDto> DeleteCustomerContactAsync()
         {
-            // This requires contact ID - consider modifying the method signature
             throw new NotImplementedException("Contact ID required for deletion");
         }
 

@@ -4,6 +4,7 @@ using Application.DTOs.Common;
 using Application.DTOs.Contact;
 using Application.IApplicationServices.Contact;
 using Application.IReositosy;
+using DataAccessLayer.Enum;
 using Domain.Entities.ApplicationEntities;
 
 namespace Infrastructure.Services.ServicesImplementation
@@ -78,6 +79,12 @@ namespace Infrastructure.Services.ServicesImplementation
                 contactTypeToUpdate.Type = updateContactTypeDto.Type;
                 contactTypeToUpdate = await _contactTypeRepository.UpdateAsync(contactTypeToUpdate);
             }
+        }
+
+        public async Task<ContactType> GetContactByTypeAsync(ContactTypeEnum contactType)
+        {
+            return (await _contactTypeRepository.FindAsync(c => c.Type == contactType)).FirstOrDefault()
+                ??throw new Exception("This contact type does not exist");
         }
     }
 }

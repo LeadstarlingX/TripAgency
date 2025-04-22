@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Authentication;
 using Application.IApplicationServices.Authentication;
+using Application.IApplicationServices.Customer;
 using Application.IReositosy;
 using Domain.Common;
 using Domain.Entities.ApplicationEntities;
@@ -27,6 +28,7 @@ namespace Infrastructure.ApplicationServices.Authentication
         private readonly IIdentityAppRepository<ApplicationUser> _userRepository;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly ICustomerService _customerService;
 
 
         public AuthenticationService(
@@ -34,9 +36,12 @@ namespace Infrastructure.ApplicationServices.Authentication
             SignInManager<ApplicationUser> signInManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration config,
-            IIdentityAppRepository<ApplicationUser> identityAppRepository)
+            IIdentityAppRepository<ApplicationUser> identityAppRepository
+            //ICustomerService customerService
+            )
         {
             _userManager = userManager;
+            //_customerService = customerService;
             _signInManager = signInManager;
             _config = config;
             _userRepository = identityAppRepository;
@@ -110,7 +115,7 @@ namespace Infrastructure.ApplicationServices.Authentication
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterDto dto)
+        public async Task<IdentityResult> RegisterAsync(RegisterDto dto, bool fromAdmin = false)
         {
             ApplicationUser user = new ApplicationUser
                 {
