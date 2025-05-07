@@ -25,29 +25,34 @@ public class Startup(IConfiguration configuration)
 
         if (env.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseHttpsRedirection();
 
         // Authentication/Authorization Middleware
         app.UseAuthentication();
         app.UseAuthorization();
 
+        // 🔽 Add this before app.UseEndpoints or app.UseRouter (if using older ASP.NET Core version)
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Path == "/")
+            {
+                context.Response.Redirect("/swagger");
+                return;
+            }
+            await next();
+        });
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-            );
+            endpoints.MapControllers();
         });
     }
 }
+
 

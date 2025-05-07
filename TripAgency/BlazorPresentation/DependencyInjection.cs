@@ -21,6 +21,9 @@ namespace Presentation
             services.AddEndpointsApiExplorer();
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
 
             return services;
         }
