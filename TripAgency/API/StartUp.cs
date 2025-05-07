@@ -6,6 +6,7 @@ using Infrastructure;
 using Infrastructure.Repository;
 using Infrastructure.Seeds;
 using Presentation;
+using Presentation.Middleware;
 
 public class Startup(IConfiguration configuration)
 {
@@ -42,11 +43,11 @@ public class Startup(IConfiguration configuration)
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "My_API V1");
         });
 
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
         });
     }
 }
-
-

@@ -17,6 +17,7 @@ using Application.IApplicationServices.Contact;
 using Infrastructure.Services.ServicesImplementation;
 using Application.IApplicationServices.Customer;
 using Infrastructure.ApplicationServices.Customer;
+using Application.Serializer;
 
 
 namespace Infrastructure
@@ -36,6 +37,7 @@ namespace Infrastructure
         {
             services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
             services.AddScoped(typeof(IIdentityAppRepository<>), typeof(IdentityRepository<>));
+            services.AddScoped<IJsonFieldsSerializer, JsonFieldsSerializer>();
             services.AddScoped<DataSeeder>();
 
 

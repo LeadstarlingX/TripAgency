@@ -6,6 +6,7 @@ using Domain.Common;
 using Domain.Entities.ApplicationEntities;
 using Domain.Entities.IdentityEntities;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -50,10 +51,10 @@ namespace Infrastructure.ApplicationServices.Authentication
 
         public async Task<UserProfileDto> GetAuthenticatedUser()
         {
-            if (_httpContextAccessor.HttpContext == null)
+            if (_httpContextAccessor.HttpContext is null)
                 throw new Exception("User Not found");
 
-            var authenticateResult = await _httpContextAccessor.HttpContext.AuthenticateAsync();   
+            var authenticateResult = await _httpContextAccessor.HttpContext.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
             if (!authenticateResult.Succeeded)
                 throw new Exception("User Not found");
 
@@ -98,7 +99,8 @@ namespace Infrastructure.ApplicationServices.Authentication
 
             if (!existingUser.IsActive) 
                 throw new Exception("Deactivated User");
-             await _signInManager.SignInAsync(existingUser, false);
+             
+            await _signInManager.SignInAsync(existingUser,false);
 
             var jwtToken = await GenerateJwtToken(existingUser);
             return new UserProfileDto
@@ -147,15 +149,18 @@ namespace Infrastructure.ApplicationServices.Authentication
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Name, user.Name ?? string.Empty),
                     new(ClaimTypes.Email, user.Email ?? string.Empty),
-                    new(ClaimTypes.Role, userRoles.ToString()!)
-
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
+
+                foreach (var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Audience = _config["Jwt:Audience"],
                     Issuer = _config["Jwt:Issuer"],
-                    IssuedAt = DateTime.UtcNow,
                     Subject = new ClaimsIdentity(claims.ToArray()),
                     Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["Jwt:ExpiryInMinutes"])),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -163,13 +168,11 @@ namespace Infrastructure.ApplicationServices.Authentication
 
                 var token = jwtTokenHandler.CreateToken(tokenDescriptor);
                 var jwtToken = jwtTokenHandler.WriteToken(token);
-                var refreshToken = "bla bla bla la fdfjodnkldsjklffdfdskjklfds";
 
                 return new TokenDto()
                 {
                     Token = jwtToken,
                     Success = true,
-                    RefreshToken = refreshToken,
                     UserRoles = userRoles,
                 };
             }

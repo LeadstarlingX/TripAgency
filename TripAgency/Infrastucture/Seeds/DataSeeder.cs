@@ -23,7 +23,7 @@ namespace Infrastructure.Seeds
         private readonly IdentityAppDbContext _identityAppDbContext = identityAppDbContext;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<ApplicationRole> _roleManeger = roleManeger;
-        public void SeedDataAsync()
+        public void SeedData()
         {
             var shouldUpdateContext = false;
 

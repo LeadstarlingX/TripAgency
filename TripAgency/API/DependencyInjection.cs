@@ -19,6 +19,8 @@ namespace Presentation
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddEndpointsApiExplorer();
+
             services.AddControllers(); // 🔥 Required for API controllers
 
             services.AddAuthentication(options =>
@@ -38,7 +40,9 @@ namespace Presentation
                     ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)
-                    )
+                    ),
+                    RoleClaimType = ClaimTypes.Role
+
                 };
             });
 
@@ -46,16 +50,19 @@ namespace Presentation
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My_API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                {                     
+                    Title = "My_API", Version = "v1" 
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+                    Description = "Bearer Authentication with JWT Token.'"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

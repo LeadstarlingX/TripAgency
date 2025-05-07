@@ -6,12 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Application.DTOs.Contact
 {
     public class ContactTypeDto : BaseDto<int>
     {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ContactTypeEnum Type { get; set; } //Email, Phone...
     }
 
