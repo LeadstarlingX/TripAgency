@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Car;
 using Application.DTOs.Common;
+using Application.Filter;
 using Application.IApplicationServices.Car;
 using Application.IReositosy;
 using AutoMapper;
@@ -15,14 +16,14 @@ namespace Infrastructure.ApplicationServices
     public class CarService : ICarService
     {
         private readonly IAppRepository<Car> _carRepositry;
-        private readonly IAppRepository<Category> _categoryRepository;
+       // private readonly IAppRepository<Category> _categoryRepository;
         private readonly IMapper _mapper;
 
-        public CarService(IAppRepository<Car> carRepository ,IMapper mapper,IAppRepository<Category> categoryRpository)
+        public CarService(IAppRepository<Car> carRepository ,IMapper mapper)
         {
              _carRepositry = carRepository;
             _mapper = mapper;
-            _categoryRepository = categoryRpository;
+           // _categoryRepository = categoryRpository;
         }
         public async Task<CarDto> CreateCarAsync(CreateCarDto createCarDto)
         {
@@ -103,5 +104,39 @@ namespace Infrastructure.ApplicationServices
 
         }
 
+           public  async  Task<IEnumerable<CarDto>> FilterCar(CarFilter filter)
+        {
+            var query = await _carRepositry.GetAllAsync();
+
+            if(filter.Capacity != null)
+            {
+                query = query.Where(c => c.Capacity == filter.Capacity);
+            }
+
+            if(filter.Color != null)
+            {
+                query =query.Where(c => c.Color==filter.Color);
+            }
+            if(filter.Model != null)
+            {
+                query =query.Where(c=>c.Model ==filter.Model);
+            }
+            if(filter.Mbw != null)
+            {
+                query =query.Where(c=>c.Mbw == filter.Mbw);
+
+            }
+            if(filter.Ppd != null)
+            {
+                query =query.Where(x=>x.Ppd == filter.Ppd);
+            }
+            if (filter.Pph != null) { 
+            query =query.Where(x=>x.Pph==filter.Pph);
+            
+            }
+            return _mapper.Map<IEnumerable<CarDto>>(query);
+
+
+        }
     }
 }

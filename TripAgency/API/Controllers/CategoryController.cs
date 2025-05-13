@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Category;
 using Application.DTOs.Common;
-using Infrastructure.ApplicationServices;
+using Infrastructure.ApplicationServices.Category;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

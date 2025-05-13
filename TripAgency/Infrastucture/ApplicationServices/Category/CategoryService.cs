@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.ApplicationServices
+namespace Infrastructure.ApplicationServices.Category
 {
     public class CategoryService : ICategoryService
     {

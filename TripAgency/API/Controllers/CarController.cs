@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Car;
 using Application.DTOs.Common;
+using Application.Filter;
 using Application.IApplicationServices.Car;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,17 @@ namespace API.Controllers
         }
         [HttpGet]
 
+        public async Task<IActionResult> FilterCars(CarFilter filter)
+        {
+
+            var result= await _carservice.FilterCar(filter);
+            return Ok(result);
+        }
+
+
+
+
+        [HttpGet]
         public async Task<IActionResult> GetCarById(BaseDto<int> dto)
         {
           var result=  await _carservice.GetCarByIdAsync(dto);
