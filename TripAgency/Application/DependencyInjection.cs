@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Mapping.CarProfile;
+using Application.Mapping.CategoryProfile;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,11 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+
+            services.AddAutoMapper(typeof(CarProfile).Assembly);
+            services.AddAutoMapper(typeof(CategoryProfile).Assembly);
+
+
             return services;
         }
     }
