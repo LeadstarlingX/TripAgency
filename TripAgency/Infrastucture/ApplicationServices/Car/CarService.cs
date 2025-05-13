@@ -33,7 +33,7 @@ namespace Infrastructure.ApplicationServices
         }
 
 
-        public async Task DeleteCarAsync(BaseDto<int> dto)
+        public async Task<CarDto> DeleteCarAsync(BaseDto<int> dto)
         {
 
             var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
@@ -43,7 +43,7 @@ namespace Infrastructure.ApplicationServices
             }
 
               await _carRepositry.RemoveAsync(car);
-
+            return _mapper.Map<CarDto>(car);
         }  
 
         public async Task<IEnumerable<CarDto>> GetCarByColor(string color)

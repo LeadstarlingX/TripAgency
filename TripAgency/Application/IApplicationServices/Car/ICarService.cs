@@ -16,7 +16,7 @@ namespace Application.IApplicationServices.Car
         Task<IEnumerable<CarDto>> GetCarsAsync();
         Task<CarDto> CreateCarAsync(CreateCarDto createCarDto);
         Task<CarDto> UpdateCarAsync(UpdateCarDto updatecarDto);
-        Task DeleteCarAsync(BaseDto<int>  dto);
+        Task<CarDto> DeleteCarAsync(BaseDto<int>  dto);
         Task<CarDto> GetCarByIdAsync(BaseDto<int> id);
         Task<IEnumerable<CarDto>> GetCarByColor(string color);
 

@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.ApplicationServices.Category
+namespace Infrastructure.ApplicationServices
 {
     public class CategoryService : ICategoryService
     {
@@ -42,7 +42,7 @@ namespace Infrastructure.ApplicationServices.Category
            
         }
 
-        public async Task DeleteCategoryAsync(BaseDto<int> dto)
+        public async Task<CategoryDto> DeleteCategoryAsync(BaseDto<int> dto)
         {
             var c = (await _categoryRepository.FindAsync(x=> x.Id == dto.Id)).FirstOrDefault();
             if (c == null)
@@ -50,6 +50,7 @@ namespace Infrastructure.ApplicationServices.Category
                 throw new KeyNotFoundException("category not found");
             }
             await _categoryRepository.RemoveAsync(c);
+            return _mapper.Map<CategoryDto>(c);
         }
 
         public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync()

@@ -14,7 +14,7 @@ namespace Application.IApplicationServices.Category
         Task<IEnumerable<CategoryDto>> GetCategoriesAsync();
         Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto);
         Task<CategoryDto> UpdateCategoryAsync(UpdateCategoryDto updatecategoryDto);
-        Task DeleteCategoryAsync(BaseDto<int> dto);
+        Task<CategoryDto> DeleteCategoryAsync(BaseDto<int> dto);
         Task<CategoryDto> GetCategoryByIdAsync(BaseDto<int> id);
 
        
