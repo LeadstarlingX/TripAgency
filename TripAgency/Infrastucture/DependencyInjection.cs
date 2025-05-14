@@ -20,8 +20,8 @@ using Infrastructure.ApplicationServices.Customer;
 using Application.Serializer;
 using Application.IApplicationServices.Car;
 using Application.IApplicationServices.Category;
-using Infrastructure.ApplicationServices.Car;
-using Infrastructure.ApplicationServices.Category;
+using Infrastructure.ApplicationServices;
+using Infrastructure.ApplicationServices;
 
 
 namespace Infrastructure
