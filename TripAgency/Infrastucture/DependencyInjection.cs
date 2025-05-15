@@ -18,6 +18,10 @@ using Infrastructure.Services.ServicesImplementation;
 using Application.IApplicationServices.Customer;
 using Infrastructure.ApplicationServices.Customer;
 using Application.Serializer;
+using Application.IApplicationServices.Car;
+using Application.IApplicationServices.Category;
+using Infrastructure.ApplicationServices;
+using Infrastructure.ApplicationServices;
 
 
 namespace Infrastructure
@@ -42,11 +46,16 @@ namespace Infrastructure
 
 
 
+
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContactTypeService, ContactTypeService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+
             return services;
         }
 
