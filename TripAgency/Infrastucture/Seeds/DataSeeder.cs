@@ -1,5 +1,5 @@
-﻿using DataAccessLayer.Context;
-using DataAccessLayer.Enum;
+﻿using Domain.Context;
+using Domain.Enum;
 using Domain.Common;
 using Domain.Entities.ApplicationEntities;
 using Domain.Entities.IdentityEntities;

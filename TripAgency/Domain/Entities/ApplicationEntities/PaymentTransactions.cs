@@ -1,5 +1,5 @@
-﻿using DataAccessLayer.Entities.Common;
-using DataAccessLayer.Enum;
+﻿using Domain.Entities.Common;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Common;
 using Application.DTOs.Contact;
-using DataAccessLayer.Enum;
+using Domain.Enum;
 using Domain.Entities;
 using Domain.Entities.ApplicationEntities;
 

@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Common;
-using DataAccessLayer.Enum;
+using Domain.Enum;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;

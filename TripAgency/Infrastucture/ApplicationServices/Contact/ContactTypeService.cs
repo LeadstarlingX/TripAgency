@@ -4,7 +4,7 @@ using Application.DTOs.Common;
 using Application.DTOs.Contact;
 using Application.IApplicationServices.Contact;
 using Application.IReositosy;
-using DataAccessLayer.Enum;
+using Domain.Enum;
 using Domain.Entities.ApplicationEntities;
 
 namespace Infrastructure.Services.ServicesImplementation

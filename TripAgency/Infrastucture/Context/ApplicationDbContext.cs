@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -8,10 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.Marshalling;
-using DataAccessLayer.Enum;
+using Domain.Enum;
 using Domain.Entities.ApplicationEntities;
 
-namespace DataAccessLayer.Context
+namespace Domain.Context
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)// IdentityDbContext<User, IdentityRole<long>, long>(options)
     {

@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Entities.Common;
+﻿using Domain.Entities.Common;
 using Domain.Entities.ApplicationEntities;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Entities
+namespace Domain.Entities
 {
     public class PostType : BaseEntity
     {
