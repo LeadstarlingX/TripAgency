@@ -22,6 +22,7 @@ using Application.IApplicationServices.Car;
 using Application.IApplicationServices.Category;
 using Infrastructure.ApplicationServices;
 using Infrastructure.ApplicationServices;
+using Application.IApplicationServices;
 
 
 namespace Infrastructure
@@ -54,6 +55,8 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICategoryService, CategoryService>();
+           
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 
 
             return services;
