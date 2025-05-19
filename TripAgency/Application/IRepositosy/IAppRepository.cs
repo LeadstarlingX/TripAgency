@@ -11,6 +11,8 @@ namespace Application.IReositosy
     {
         Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] navigationPropertiesl);
         IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties);
+
+        IQueryable<TEntity> GetAllWithAllInclude();
         Task<IEnumerable<TEntity>> GetAllWithAllIncludeAsync();
 
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationProperties);

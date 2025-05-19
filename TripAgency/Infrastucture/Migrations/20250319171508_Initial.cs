@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace Domain.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

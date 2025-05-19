@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Entities;
+﻿using Domain.Entities;
 using Domain.Entities.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Context
+namespace Domain.Context
 {
     public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> op) : IdentityDbContext<ApplicationUser, ApplicationRole, long>(op)
     {
