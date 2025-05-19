@@ -35,8 +35,8 @@ namespace Infrastructure.ApplicationServices
         public async Task<PaymentTransactionDto> DeletePaymentTransactionAsync(BaseDto<int> dto)
         {
             var t = (await _paymenttransaction.FindAsync(x=>x.Id == dto.Id)).FirstOrDefault();
-
-            await _paymenttransaction.RemoveAsync(t);
+            var s= _mapper.Map<PaymentTransaction>(t);
+            await _paymenttransaction.RemoveAsync(s);
 
             return _mapper.Map<PaymentTransactionDto>(t);
            
