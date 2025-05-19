@@ -70,7 +70,7 @@ namespace Infrastructure.ApplicationServices.Customer
             {
                 CustomerId = customerAsUser.Id,
                 Value = dto.Email,
-                ContactTypeId = (_contactTypeService.GetContactByTypeAsync(DataAccessLayer.Enum.ContactTypeEnum.Email).GetAwaiter().GetResult()).Id,
+                ContactTypeId = (_contactTypeService.GetContactByTypeAsync(Domain.Enum.ContactTypeEnum.Email).GetAwaiter().GetResult()).Id,
             });
 
             var created = await _customerRepository.InsertAsync(customer);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace Domain.Migrations
 {
     /// <inheritdoc />
     public partial class AddPayments_Transactions_Methods : Migration

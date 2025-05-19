@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Enum
+namespace Domain.Enum
 {
     public enum BookingStatusEnum
     {
         Pending,
         Complete,
-        Refund
+        Refund,
+        All
     }
 }
