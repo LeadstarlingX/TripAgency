@@ -18,6 +18,7 @@ namespace Application
             services.AddAutoMapper(typeof(CategoryProfile).Assembly);
 
 
+
             return services;
         }
     }

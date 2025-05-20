@@ -34,6 +34,8 @@ public class Startup(IConfiguration configuration)
         app.UseStaticFiles();
         app.UseRouting();
 
+        app.UseCors("DevCors");
+
         app.UseAuthentication();
         app.UseAuthorization();
 
