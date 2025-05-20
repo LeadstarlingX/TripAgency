@@ -21,7 +21,7 @@ namespace Presentation
         {
             services.AddEndpointsApiExplorer();
 
-            services.AddControllers(); // 🔥 Required for API controllers
+            services.AddControllers();
 
             services.AddAuthentication(options =>
             {

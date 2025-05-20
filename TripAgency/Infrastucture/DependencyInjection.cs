@@ -21,8 +21,8 @@ using Application.Serializer;
 using Application.IApplicationServices.Car;
 using Application.IApplicationServices.Category;
 using Infrastructure.ApplicationServices;
+using Infrastructure.ApplicationServices;
 using Application.IApplicationServices.Booking;
-using Application.IApplicationServices.CarBooking;
 
 
 namespace Infrastructure
@@ -55,8 +55,6 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IBookingService, BookingService>();
-            services.AddScoped<ICarBookingService,CarBookingService>();
 
 
             return services;
