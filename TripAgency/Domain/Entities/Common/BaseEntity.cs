@@ -48,7 +48,7 @@ namespace Domain.Entities.Common
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return Id.GetHashCode();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.IReositosy;
+﻿using Application;
+using Application.IReositosy;
 using Application.IUnitOfWork;
 using Domain.Context;
 using Domain.Entities.IdentityEntities;
@@ -15,6 +16,7 @@ public class Startup(IConfiguration configuration)
     public void ConfigureServices(IServiceCollection services)
     {
         services
+            .AddApplication()
             .AddInfrastructure(Configuration)
             .AddPresentation(Configuration);
     }
