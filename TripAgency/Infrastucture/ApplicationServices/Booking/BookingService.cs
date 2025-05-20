@@ -26,7 +26,7 @@ namespace Infrastructure.ApplicationServices
         /// <summary>
         /// The booking repositry
         /// </summary>
-        private readonly IAppRepository<Booking> _bookingRepositry;
+        private readonly IAppRepository<Booking> _bookingRepository;
         /// <summary>
         /// The mapper
         /// </summary>
@@ -37,9 +37,9 @@ namespace Infrastructure.ApplicationServices
         /// </summary>
         /// <param name="bookingRepositry">The booking repositry.</param>
         /// <param name="mapper">The mapper.</param>
-        public BookingService(IAppRepository<Booking> bookingRepositry, IMapper mapper)
+        public BookingService(IAppRepository<Booking> bookingRepository, IMapper mapper)
         {
-            _bookingRepositry = bookingRepositry;
+            _bookingRepository = bookingRepository;
             _mapper = mapper;
         }
 
@@ -49,37 +49,39 @@ namespace Infrastructure.ApplicationServices
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BookingDto>> GetBookingsByFilterAsync(BookingFilter? filter)
+        public async Task<IEnumerable<BookingDto>> GetByFilterAsync(BookingFilter? filter)
         {
-            var query = _bookingRepositry.GetAllWithAllInclude();
+                var query = _bookingRepository.GetAll();
+            if (filter != null)
+            {
+                if (filter.CustomerId != 0)
+                    query = query.Where(x => x.CustomerId == filter.CustomerId);
 
-            if(filter.CustomerId != 0)
-                query = query.Where(x => x.CustomerId == filter.CustomerId);
+                if (filter.EmployeeId != 0)
+                    query = query.Where(x => x.Employeeid == filter.EmployeeId);
 
-            if (filter.EmployeeId != 0)
-                query = query.Where(x => x.Employeeid == filter.EmployeeId);
+                if (filter.NumOfPassengers != 0)
+                    query = query.Where(x => x.NumOfPassengers == filter.NumOfPassengers);
 
-            if (filter.NumOfPassengers != 0)
-                query = query.Where(x => x.NumOfPassengers == filter.NumOfPassengers);
+                if (filter.BookingType != null)
+                    query = query.Where(x => x.BookingType == filter.BookingType);
 
-            if (filter.BookingType != null)
-                query = query.Where(x => x.BookingType == filter.BookingType);
+                if (filter.Payments != null)
+                    query = query.Where(x => x.Payments == filter.Payments);
 
-            if (filter.Payments != null)
-                query = query.Where(x => x.Payments == filter.Payments);
+                if (filter.Status != BookingStatusEnum.All)
+                    query = query.Where(x => x.Status == filter.Status);
 
-            if (filter.Status != BookingStatusEnum.All)
-                query = query.Where(x => x.Status == filter.Status);
+                if (filter.StartDateTime != DateTime.MinValue)
+                    query = query.Where(x => x.StartDateTime >= filter.StartDateTime);
 
-            if (filter.StartDateTime != DateTime.MinValue)
-                query = query.Where(x => x.StartDateTime >=  filter.StartDateTime);
-
-            if (filter.EndDateTime != DateTime.MaxValue)
-                query = query.Where(x => x.StartDateTime <= filter.StartDateTime);
-
+                if (filter.EndDateTime != DateTime.MaxValue)
+                    query = query.Where(x => x.EndDateTime <= filter.EndDateTime);
+            }
 
             var result = await query.ToListAsync();
-            return _mapper.Map<IEnumerable<BookingDto>>(result);
+                return _mapper.Map<IEnumerable<BookingDto>>(result);
+
         }
         /// <summary>
         /// Gets the booking by identifier asynchronous.
@@ -87,9 +89,9 @@ namespace Infrastructure.ApplicationServices
         /// <param name="dto">The dto.</param>
         /// <returns></returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Booking Not Found</exception>
-        public async Task<BookingDto> GetBookingByIdAsync(BaseDto<int> dto)
+        public async Task<BookingDto> GetByIdAsync(BaseDto<int> dto)
         {
-            var booking = (await _bookingRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
+            var booking = (await _bookingRepository.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
             if (booking == null)
             {
                 throw new KeyNotFoundException("Booking Not Found");
@@ -105,10 +107,10 @@ namespace Infrastructure.ApplicationServices
         /// <returns>
         /// A dto of the created booking
         /// </returns>
-        public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
+        public async Task<BookingDto> CreateAsync(CreateBookingDto createBookingDto)
         {
             var b = _mapper.Map<Booking>(createBookingDto);
-            await _bookingRepositry.InsertAsync(b);
+            await _bookingRepository.InsertAsync(b);
             return _mapper.Map<BookingDto>(b);
         }
 
@@ -120,27 +122,24 @@ namespace Infrastructure.ApplicationServices
         /// A dto of the updated booking
         /// </returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Booking Not found</exception>
-        public async Task<BookingDto> UpdateBookingAsync(UpdateBookingDto updateBookingDto)
+        public async Task<BookingDto> UpdateAsync(UpdateBookingDto updateBookingDto)
         {
-            var result = (await _bookingRepositry.FindAsync(x => x.Id == updateBookingDto.Id)).FirstOrDefault();
-            if(result == null)
-                throw new KeyNotFoundException("Booking Not found");
-
-            var b = await _bookingRepositry.UpdateAsync(_mapper.Map<Booking>(updateBookingDto));
-            return _mapper.Map<BookingDto>(b);
+            var result = _mapper.Map<Booking>(updateBookingDto);
+            await _bookingRepository.UpdateAsync(result);
+            return _mapper.Map<BookingDto>(result);
         }
         /// <summary>
         /// Deletes the booking by identifier asynchronous.
         /// </summary>
         /// <param name="dto">The dto which handels the Id.</param>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Booking Not found</exception>
-        public async Task DeleteBookingByIdAsync(BaseDto<int> dto)
+        public async Task DeleteByIdAsync(BaseDto<int> dto)
         {
-            var booking = (await _bookingRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
+            var booking = (await _bookingRepository.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
             if(booking == null)
                 throw new KeyNotFoundException("Booking Not found");
 
-            await _bookingRepositry.RemoveAsync(booking);
+            await _bookingRepository.RemoveAsync(booking);
         }
     }
 }

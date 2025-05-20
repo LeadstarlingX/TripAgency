@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using Domain.Entities.Common;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.ApplicationEntities
 {
-    public class CarBooking
+    public class CarBooking : BaseEntity
     {
         public CarBooking()
         {
             ImageShots = new HashSet<ImageShot>();
-
         }
         public int BookingId { get; set; }
         public int CarId { get; set; }

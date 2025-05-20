@@ -13,11 +13,11 @@ namespace Application.DTOs.Booking
     {
         public long CustomerId { get; set; }
         public long EmployeeId { get; set; }
-        public string BookingType { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
+        public string? BookingType { get; set; }
+        public DateTime StartDateTime { get; set; } = DateTime.MinValue;
+        public DateTime EndDateTime { get; set; } = DateTime.MinValue;
         public BookingStatusEnum Status { get; set; }
         public int NumOfPassengers { get; set; }
-        public ICollection<Payment> Payments { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
     }
 }

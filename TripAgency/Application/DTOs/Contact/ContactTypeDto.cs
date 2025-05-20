@@ -1,7 +1,6 @@
 ﻿using Application.DTOs.Common;
 using Domain.Enum;
 using Domain.Entities;
-using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
