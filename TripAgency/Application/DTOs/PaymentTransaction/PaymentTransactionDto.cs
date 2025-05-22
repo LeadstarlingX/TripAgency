@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.DTOs.PaymentTransactionDto
 {
      public class PaymentTransactionDto:BaseDto<int>
     {
         public TransactionTypeEnum TransactionType { get; set; }
         public decimal Amount { get; set; }
         public DateTime TransactionDate { get; set; }
-        public Payment? Payment { get; set; } // Navigation
+       // public Payment payment { get; set; } // Navigation
         //public PaymentMethod? PaymentMethod { get; set; } // Navigat
     }
 }
