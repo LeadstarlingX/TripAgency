@@ -1,7 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Common;
 using Application.DTOs.PaymentTransaction;
-using Application.DTOs.PaymentTransactionDto;
+using Application.DTOs;
 using Application.IApplicationServices.PaymentTransaction;
 using Application.IReositosy;
 using AutoMapper;

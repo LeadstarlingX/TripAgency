@@ -93,7 +93,7 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car deleted successfully", StatusCodes.Status200OK),
+                    new ApiResponse(true, "deleted successfully", StatusCodes.Status200OK),
                     string.Empty));
         }
 
@@ -113,7 +113,7 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car updated successfully", StatusCodes.Status200OK, result),
+                    new ApiResponse(true, " updated successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
 

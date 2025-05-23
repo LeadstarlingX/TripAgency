@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.PaymentTransactionDto
+namespace Application.DTOs
 {
      public class PaymentTransactionDto:BaseDto<int>
     {

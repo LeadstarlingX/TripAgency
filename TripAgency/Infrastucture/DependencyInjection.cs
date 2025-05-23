@@ -24,6 +24,7 @@ using Infrastructure.ApplicationServices;
 using Infrastructure.ApplicationServices;
 using Application.IApplicationServices;
 using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Payment;
 
 
 namespace Infrastructure
@@ -59,6 +60,7 @@ namespace Infrastructure
            
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
 
             return services;

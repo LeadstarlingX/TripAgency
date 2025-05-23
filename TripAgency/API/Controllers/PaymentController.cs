@@ -1,13 +1,9 @@
-﻿using Application.DTOs;
-using Application.DTOs.Actions;
+﻿using Application.DTOs.Actions;
 using Application.DTOs.Common;
+using Application.DTOs.Payment;
 using Application.DTOs.PaymentMethod;
-using Application.DTOs.PaymentTransaction;
-
-using Application.IApplicationServices;
-using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Payment;
 using Application.Serializer;
-using Infrastructure.ApplicationServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,42 +11,39 @@ namespace API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PaymentTransactionController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly IPaymentTransactionService _paymenttransactionService;
+        private readonly IPaymentService _paymentService;
         private readonly IJsonFieldsSerializer _jsonFieldsSerializer;
-        public PaymentTransactionController(IPaymentTransactionService paymenttransactionService
-            , IJsonFieldsSerializer jsonFieldsSerializer)
+
+        public PaymentController(IPaymentService paymentService 
+            ,IJsonFieldsSerializer jsonFieldsSerializer)
         {
-             _paymenttransactionService = paymenttransactionService;
+             _paymentService = paymentService;
             _jsonFieldsSerializer = jsonFieldsSerializer;
+            
+
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<List<PaymentTransactionDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaymentTransaction()
+        [ProducesResponseType(typeof(ApiResponse<List<PaymentDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllPayments()
         {
-            var PaymentTransactions = await _paymenttransactionService.GetPaymentTransactionsAsync();
+            var Payment = await _paymentService.GetPaymentsAsync();
             return new RawJsonActionResult(
             _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "", StatusCodes.Status200OK, PaymentTransactions),
+                    new ApiResponse(true, "", StatusCodes.Status200OK, Payment),
                     string.Empty));
 
         }
-
-
-
-
-
-
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaymentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPaymentTransactionById(BaseDto<int> dto)
+        public async Task<IActionResult> GetPaymentById(BaseDto<int> dto)
         {
-            var paymenttransaction = await _paymenttransactionService.GetPaymentTransactionByIdAsync(dto);
-            if (paymenttransaction == null)
+            var payment = await _paymentService.GetPaymentByIdAsync(dto);
+            if (payment== null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -59,19 +52,17 @@ namespace API.Controllers
             }
             return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(true, "", StatusCodes.Status200OK,paymenttransaction),
+                        new ApiResponse(true, "", StatusCodes.Status200OK, payment),
                         string.Empty));
 
         }
-
-
-
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse<PaymentDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreatePaymentTransaction(CreatePaymentTransactionDto dto)
+        public async Task<IActionResult> CreatePayment(CreatePaymentDto dto)
         {
-            var result = await _paymenttransactionService.CreatePaymentTransactionAsync(dto);
+            var result = await _paymentService.CreatePaymentAsync(dto);
+
             if (result == null)
             {
                 return new RawJsonActionResult(
@@ -82,18 +73,17 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "created successfully", StatusCodes.Status201Created, result),
+                    new ApiResponse(true, "Car created successfully", StatusCodes.Status201Created, result),
                     string.Empty));
+
         }
-
-
 
         [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeletePaymentTransaction(BaseDto<int> dto)
+        public async Task<IActionResult> DeletePayment(BaseDto<int> dto)
         {
-            var result = await _paymenttransactionService.DeletePaymentTransactionAsync(dto);
+            var result = await _paymentService.DeletePaymentAsync(dto);
             if (result == null)
             {
                 return new RawJsonActionResult(
@@ -104,17 +94,16 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car deleted successfully", StatusCodes.Status200OK),
+                    new ApiResponse(true, "deleted successfully", StatusCodes.Status200OK),
                     string.Empty));
         }
 
-
         [HttpPut]
-        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaymentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePaymentTransaction(UpdatePaymentTransactionDto dto)
+        public async Task<IActionResult> UpdatePayment(UpdatePaymentDto dto)
         {
-            var result = await _paymenttransactionService.UpdatePaymentTransaction(dto);
+            var result = await _paymentService.UpdatePayment(dto);
             if (result == null)
             {
                 return new RawJsonActionResult(
@@ -125,9 +114,20 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "updated successfully", StatusCodes.Status200OK, result),
+                    new ApiResponse(true, " updated successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -140,4 +140,5 @@ namespace API.Controllers
 
 
     }
-}
+
+}     
