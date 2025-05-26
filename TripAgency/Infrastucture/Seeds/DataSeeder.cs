@@ -79,7 +79,17 @@ namespace Infrastructure.Seeds
                     _userManager.ConfirmEmailAsync(newUser, code).GetAwaiter().GetResult();
                 }
                 shouldUpdateContext = true;
+            }
 
+            if (!_context.ContactTypes.Any())
+            {
+                shouldUpdateContext = true;
+
+                var contactTypes = Enum.GetValues<ContactTypeEnum>()
+                    .Select(type => new ContactType { Type = type })
+                    .ToList();
+
+                _context.ContactTypes.AddRange(contactTypes);
             }
 
 

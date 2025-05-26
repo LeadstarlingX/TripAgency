@@ -15,7 +15,7 @@ namespace Application.IApplicationServices.Customer
         Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto);
         Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto);
         Task DeleteCustomerAsync(BaseDto<long> dto);
-        Task<ContactsDto> GetCustomerContactAsync();
+        Task<ContactsDto> GetCustomerContactAsync(BaseDto<long> dto);
         Task<CustomerDto> UpdateCustomerContactsAsync();
         Task<CustomerDto> DeleteCustomerContactAsync();
     }

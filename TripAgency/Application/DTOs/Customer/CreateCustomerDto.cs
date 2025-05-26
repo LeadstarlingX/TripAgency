@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Common;
+﻿using Application.DTOs.Authentication;
+using Application.DTOs.Common;
 using Application.DTOs.Contact;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,6 @@ namespace Application.DTOs.Customer
         public string LastName { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public string Email {  get; set; } = string.Empty;  
-        public required ContactsDto Contacts { get; set; }
+        public required RegisterDto UserDto { get; set; }
     }
 }

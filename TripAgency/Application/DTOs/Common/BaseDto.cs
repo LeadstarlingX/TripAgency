@@ -9,6 +9,6 @@ namespace Application.DTOs.Common
 {
     public class BaseDto<T> 
     {
-        public required T Id { get; set; }
+        public T Id { get; set; }
     }
 }

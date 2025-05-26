@@ -632,8 +632,8 @@ namespace Domain.Context
                 .HasForeignKey(c => c.ContactTypeId);
 
                 c.Property(c => c.Value)
-                .HasColumnName("country")
-                .HasColumnType("nvarchar(10)")
+                .HasColumnName("Value")
+                .HasColumnType("nvarchar(256)")
                 .HasMaxLength(256)
                 .IsRequired();
 

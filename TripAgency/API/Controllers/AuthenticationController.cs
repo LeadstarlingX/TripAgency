@@ -31,7 +31,7 @@ namespace BlazorPresentation.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             var result = await _authService.RegisterAsync(registerDto);

@@ -117,23 +117,25 @@ namespace Infrastructure.ApplicationServices.Authentication
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterDto dto, bool fromAdmin = false)
+        public async Task<long> RegisterAsync(RegisterDto dto)
         {
-            ApplicationUser user = new ApplicationUser
-                {
-                    UserName = dto.FirstName+dto.LastName,
-                    Email = dto.Email,
-                    Name = $"{dto.FirstName} {dto.LastName}",
-                    Address = dto.Address
-                };
+            var user = new ApplicationUser
+            {
+                UserName = dto.FirstName + dto.LastName,
+                Email = dto.Email,
+                Name = $"{dto.FirstName} {dto.LastName}",
+                Address = dto.Address
+            };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
+
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user,(dto.Role).ToString());
+                await _userManager.AddToRoleAsync(user, dto.Role.ToString());
+                return user.Id;
             }
-
-            return result;
+            var errorMessages = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"User creation failed: {errorMessages}");
         }
 
         private async Task<TokenDto> GenerateJwtToken(ApplicationUser user)

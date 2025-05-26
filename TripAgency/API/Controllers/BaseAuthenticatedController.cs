@@ -12,8 +12,8 @@ namespace API.Controllers
     [Route("api/[controller]/[action]")]
     public class BaseAuthenticatedController(IAuthenticationService authenticationService, IJsonFieldsSerializer jsonFieldsSerializer) : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService = authenticationService;
-        private readonly IJsonFieldsSerializer _jsonFieldsSerializer = jsonFieldsSerializer;
+        protected readonly IAuthenticationService _authenticationService = authenticationService;
+        protected readonly IJsonFieldsSerializer _jsonFieldsSerializer = jsonFieldsSerializer;
 
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<UserProfileDto> GetCurrentUserAsync()
