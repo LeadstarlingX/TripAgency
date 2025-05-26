@@ -23,6 +23,8 @@ using Application.IApplicationServices.Category;
 using Infrastructure.ApplicationServices;
 using Infrastructure.ApplicationServices;
 using Application.IApplicationServices.Booking;
+using Application.IApplicationServices;
+using Application.IApplicationServices.PaymentTransaction;
 
 
 namespace Infrastructure
