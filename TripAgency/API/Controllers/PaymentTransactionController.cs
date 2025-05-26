@@ -131,13 +131,35 @@ namespace API.Controllers
 
 
 
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
+
+        public async Task<IActionResult> GetTransactionForPayment(BaseDto<int> dto )
+        { 
+            var result = await _paymenttransactionService.GetPaymentTransactionForPayment(dto);
+            if (result == null)
+            {
+                return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(false,"failed" ,StatusCodes.Status400BadRequest),string.Empty));
+            }
+
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true ,"success", StatusCodes.Status200OK , result),string.Empty));
+
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByPaymentMethod(BaseDto<int> dto)
+        {
+         var result=   _paymenttransactionService.GetPaymentTransactionDtosByMethod(dto);
+           
+            if (result == null)
+            {
+                return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(false, "failed", StatusCodes.Status400BadRequest), string.Empty));
+            }
+
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "success", StatusCodes.Status200OK, result), string.Empty));
 
 
-
-
-
-
-
-
+        }
     }
 }

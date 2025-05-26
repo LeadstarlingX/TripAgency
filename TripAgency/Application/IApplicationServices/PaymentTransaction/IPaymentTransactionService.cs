@@ -17,5 +17,7 @@ namespace Application.IApplicationServices.PaymentTransaction
         Task<PaymentTransactionDto> CreatePaymentTransactionAsync(CreatePaymentTransactionDto createPaymentTranDto);
         Task<PaymentTransactionDto> UpdatePaymentTransaction(UpdatePaymentTransactionDto updatePaymentTranDto);
         Task<PaymentTransactionDto> DeletePaymentTransactionAsync(BaseDto<int> dto);
+        Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto);
+        Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionDtosByMethod(BaseDto<int> dto);
     }
 }

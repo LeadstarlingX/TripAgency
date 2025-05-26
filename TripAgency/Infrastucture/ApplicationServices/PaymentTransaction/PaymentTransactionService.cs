@@ -1,7 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Common;
 using Application.DTOs.PaymentTransaction;
-using Application.DTOs;
 using Application.IApplicationServices.PaymentTransaction;
 using Application.IReositosy;
 using AutoMapper;
@@ -62,6 +61,20 @@ namespace Infrastructure.ApplicationServices
             await _paymenttransaction.UpdateAsync(t);
 
             return _mapper.Map<PaymentTransactionDto>(t);
+        }
+
+            public  async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto)
+        {
+            var p = await _paymenttransaction.FindAsync(x => x.PaymentId == dto.Id, x => x.Payment);
+            return _mapper.Map<IEnumerable<PaymentTransactionDto>>(p);
+
+        }
+
+         public async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionDtosByMethod(BaseDto<int> dto)
+        {
+            var t = await _paymenttransaction.FindAsync(x => x.PaymentMethodId == dto.Id, p => p.PaymentMethod);
+
+            return _mapper.Map<IEnumerable<PaymentTransactionDto>>(t);
         }
     }
 }
