@@ -1,6 +1,8 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Common;
+using Application.DTOs.Payment;
 using Application.DTOs.PaymentTransaction;
+using Application.IApplicationServices.Payment;
 using Application.IApplicationServices.PaymentTransaction;
 using Application.IReositosy;
 using AutoMapper;
@@ -19,16 +21,51 @@ namespace Infrastructure.ApplicationServices
         private readonly IAppRepository<PaymentTransaction> _paymenttransaction;
 
         private readonly IMapper _mapper;
-        public PaymentTransactionService(IMapper mapper ,IAppRepository<PaymentTransaction>trans)
+
+        private readonly IPaymentService _service;
+        public PaymentTransactionService(IMapper mapper ,IAppRepository<PaymentTransaction>trans ,IPaymentService paymentService)
         {
             _mapper = mapper;
             _paymenttransaction = trans;
+            _service = paymentService;
         }
 
         public async Task<PaymentTransactionDto> CreatePaymentTransactionAsync(CreatePaymentTransactionDto createPaymentTranDto)
         {
            var t = _mapper.Map<PaymentTransaction>(createPaymentTranDto);
             await _paymenttransaction.InsertAsync(t);
+            BaseDto<int> b = new BaseDto<int> { Id = createPaymentTranDto.PaymentId };
+            PaymentDto paymentDto = await _service.GetPaymentByIdAsync(b);
+
+            UpdatePaymentDto p;
+
+            p = new UpdatePaymentDto
+            {
+                Id = createPaymentTranDto.PaymentId,
+              
+            };
+
+           // p.Id = createPaymentTranDto.PaymentId;
+            p.BookingId = paymentDto.BookingId;
+            p.PaymentDate = DateTime.Now;
+            p.Notes =   $"transaction{createPaymentTranDto.PaymentId}";
+            p.AmountDue -= createPaymentTranDto.Amount;
+            p.AmountPaid += createPaymentTranDto.Amount;
+            if (createPaymentTranDto.TransactionType == DataAccessLayer.Enum.TransactionTypeEnum.Deposit)
+            {
+                p.Status = DataAccessLayer.Enum.PaymentStatusEnum.Pending;
+            }
+            else if (p.Status == DataAccessLayer.Enum.PaymentStatusEnum.complete)
+            {
+                p.Status = DataAccessLayer.Enum.PaymentStatusEnum.complete;
+            }
+            else
+            {
+                p.Status = DataAccessLayer.Enum.PaymentStatusEnum.refund;
+            }
+
+
+            await _service.UpdatePayment(p);
             return _mapper.Map<PaymentTransactionDto>(t);
         }
 

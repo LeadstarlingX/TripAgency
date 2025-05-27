@@ -10,6 +10,9 @@ namespace Application.DTOs
 {
     public class CreatePaymentTransactionDto
     {
+
+        public int PaymentId { get; set; }
+        public int PaymentMethodId { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
         public decimal Amount { get; set; }
         public DateTime TransactionDate { get; set; }

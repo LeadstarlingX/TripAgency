@@ -81,7 +81,43 @@ namespace Infrastructure.Seeds
                 shouldUpdateContext = true;
 
             }
+            //if (!_context.Bookings.Any())
+            //{
+            //    Booking booking;
+            //    booking = new Booking
+            //    {
+                   
+            //        Status =BookingStatusEnum.Pending,
+            //        //CustomerId = 1,
+            //        //Employeeid = 1,
+            //        NumOfPassengers = 6,
+            //        BookingType="carBooking" ,
+            //        StartDateTime = DateTime.Now,
+            //        EndDateTime= DateTime.MaxValue,
 
+
+            //    };
+            //    _context.Bookings.Add(booking);
+            //    shouldUpdateContext = true;
+
+            //}
+            //if(!_context.Payments.Any())
+            //{
+            //    Payment payment;
+            //    payment = new Payment
+            //    {
+                   
+            //        Status = PaymentStatusEnum.Pending,
+            //        BookingId = 1,
+            //        AmountDue=1000,
+            //        AmountPaid=0,
+            //        PaymentDate=DateTime.Now,
+            //        Notes ="  ",
+
+            //    };
+            //    _context.Payments.Add(payment);
+            //    shouldUpdateContext=true;
+            //}
 
             if (shouldUpdateContext)
             {
