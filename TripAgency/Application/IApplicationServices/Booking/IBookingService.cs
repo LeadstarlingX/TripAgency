@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Common;
 using Application.DTOs.Booking;
-using Application.DTOs.Common;
 using Application.Filter;
 
 namespace Application.IApplicationServices.Booking

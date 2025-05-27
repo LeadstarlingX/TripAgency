@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.Employee;
 using Application.IApplicationServices.Employee;
 using Application.IReositosy;

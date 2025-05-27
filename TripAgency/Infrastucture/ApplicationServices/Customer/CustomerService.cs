@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Common;
-using Application.DTOs.Contact;
+﻿using Application.DTOs.Contact;
 using Application.DTOs.Customer;
 using Domain.Entities.ApplicationEntities;
 using Application.IReositosy;
@@ -16,6 +15,7 @@ using Infrastructure.Extension;
 using Domain.Enum;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Application.Common;
 
 namespace Infrastructure.ApplicationServices.Customer
 {

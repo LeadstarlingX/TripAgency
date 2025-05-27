@@ -26,12 +26,17 @@ namespace Application.Mapping.CustomerProfile
                         {
                             Contacts = src.Contacts.Select(c => new ContactDto
                             {
-                                Id = c.ContactTypeId,
+                                Id = c.Id,
                                 Value = c.Value
                             }).ToList()
                         }));
 
-            CreateMap<UpdateCustomerDto, Customer>()
+            CreateMap<CustomerContact, ContactDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value));
+
+            
+        CreateMap<UpdateCustomerDto, Customer>()
                 .ForMember(dest => dest.UserId, opt => opt.Ignore());
         }
 

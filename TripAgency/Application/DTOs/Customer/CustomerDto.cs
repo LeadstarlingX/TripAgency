@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.Contact;
 using Domain.Entities.ApplicationEntities;
 using System;

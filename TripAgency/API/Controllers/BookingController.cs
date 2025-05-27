@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Actions;
+﻿using Application.Common;
+using Application.DTOs.Actions;
 using Application.DTOs.Booking;
-using Application.DTOs.Common;
 using Application.Filter;
 using Application.IApplicationServices.Booking;
 using Application.Serializer;

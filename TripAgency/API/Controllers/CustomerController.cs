@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Actions;
+﻿using Application.Common;
+using Application.DTOs.Actions;
 using Application.DTOs.Category;
-using Application.DTOs.Common;
 using Application.DTOs.Contact;
 using Application.DTOs.Customer;
 using Application.IApplicationServices.Authentication;

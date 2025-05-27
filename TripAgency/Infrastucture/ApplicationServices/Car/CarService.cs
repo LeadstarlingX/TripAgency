@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Car;
-using Application.DTOs.Common;
+﻿using Application.Common;
+using Application.DTOs.Car;
 using Application.Filter;
 using Application.IApplicationServices.Car;
 using Application.IReositosy;

@@ -38,6 +38,7 @@ namespace Domain.Context
         public virtual DbSet<PostTag> PostTags { get; set; }
         public virtual DbSet<PostType> PostTypes { get; set; }
         public virtual DbSet<SEOMetaData> SEOMetaDatas { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }  
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

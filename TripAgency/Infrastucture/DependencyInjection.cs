@@ -22,6 +22,8 @@ using Application.IApplicationServices.Car;
 using Application.IApplicationServices.Category;
 using Infrastructure.ApplicationServices;
 using Infrastructure.ApplicationServices;
+using Application.IApplicationServices.Employee;
+using Infrastructure.ApplicationServices.Employee;
 
 
 namespace Infrastructure
@@ -54,6 +56,7 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
 
             return services;

@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Authentication;
-using Application.DTOs.Common;
+﻿using Application.Common;
+using Application.DTOs.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;

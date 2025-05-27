@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.Contact;
 using Application.DTOs.Customer;
 using System;

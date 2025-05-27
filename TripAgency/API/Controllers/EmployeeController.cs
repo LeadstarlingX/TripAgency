@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     using Application.DTOs.Employee;
-    using Application.DTOs.Common;
     using Application.IApplicationServices.Authentication;
     using Application.IApplicationServices.Employee;
     using Application.Serializer;
@@ -14,6 +13,7 @@ namespace API.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Application.DTOs.Actions;
     using Application.DTOs.Customer;
+    using Application.Common;
 
     namespace API.Controllers
     {

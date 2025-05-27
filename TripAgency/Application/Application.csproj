@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Attribute\" />
+    <Folder Include="DTOs\Trip\" />
   </ItemGroup>
 
 </Project>
