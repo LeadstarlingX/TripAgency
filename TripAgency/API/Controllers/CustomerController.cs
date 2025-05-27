@@ -70,5 +70,32 @@ namespace API.Controllers
             await _customerService.DeleteCustomerAsync(dto);
             return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Customer deleted successfuly", StatusCodes.Status200OK), string.Empty));
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateCustomerContactAsync([FromBody] CreateCustomerContactDto dto)
+        {
+            await _customerService.CreateCustomerContactAsync(dto);
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Contact created successfully", StatusCodes.Status201Created), string.Empty));
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateCustomerContactAsync([FromBody] UpdateCustomerContactDto dto)
+        {
+            await _customerService.UpdateCustomerContactAsync(dto);
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Contact updated successfully", StatusCodes.Status200OK), string.Empty));
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteCustomerContactAsync([FromQuery] BaseDto<int> dto)
+        {
+            await _customerService.DeleteCustomerContactAsync(dto);
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Contact deleted successfully", StatusCodes.Status200OK), string.Empty));
+        }
     }
 }

@@ -10,6 +10,11 @@ namespace Domain.Entities.Common
     {
         public int Id { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+
         public static bool operator ==(BaseEntity? first, BaseEntity? second)
         {
             return first is not null && second is not null && first.Equals(second);    

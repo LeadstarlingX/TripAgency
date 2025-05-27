@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Common;
-using Application.DTOs.Contact;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Customer
 {
-    public class UpdateCustomerContactDto : BaseDto<int>
+    public class CreateCustomerContactDto : BaseDto<long>
     {
-        public string? Value { get; set; }
+        public int ContactTypeId {  get; set; }
+        public required string Value {  get; set; }
     }
 }

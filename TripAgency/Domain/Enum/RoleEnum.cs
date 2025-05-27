@@ -8,9 +8,9 @@ namespace Domain.Enum
 {
     public enum RoleEnum
     {
-        Admin ,
-        Employee,
-        Customer,
-        Authenticated,
+        Admin =0,
+        Employee=1,
+        Customer=2,
+        Authenticated=3,
     }
 }

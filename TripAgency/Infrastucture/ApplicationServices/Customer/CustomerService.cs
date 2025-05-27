@@ -136,14 +136,46 @@ namespace Infrastructure.ApplicationServices.Customer
             };
         }
 
-        public async Task<CustomerDto> UpdateCustomerContactsAsync()
+        public async Task UpdateCustomerContactAsync(UpdateCustomerContactDto dto)
         {
-            throw new NotImplementedException("Contact data required for update");
+            if (dto == null || dto.Id <= 0)
+                throw new ArgumentException("Valid contact data is required for update.");
+
+            var contact = (await _customerContactRepository.FindAsync(c => c.Id == dto.Id)).FirstOrDefault()
+                ?? throw new Exception("Contact not found.");
+
+            if(dto.Value is not null && contact.Value != dto.Value)
+            {
+                contact.Value = dto.Value;
+                await _customerContactRepository.UpdateAsync(contact);
+            }       
         }
 
-        public async Task<CustomerDto> DeleteCustomerContactAsync()
+        public async Task DeleteCustomerContactAsync(BaseDto<int> customerContatDto)
         {
-            throw new NotImplementedException("Contact ID required for deletion");
+            if (customerContatDto.Id <= 0)
+                throw new ArgumentException("Contact ID is required for deletion.");
+
+            var contact = (await _customerContactRepository.FindAsync(c => c.Id == customerContatDto.Id)).FirstOrDefault()
+                ?? throw new KeyNotFoundException("Contact not found.");
+
+            var customerId = contact.CustomerId;
+            await _customerContactRepository.RemoveAsync(contact);
+        }
+
+        public async Task CreateCustomerContactAsync(CreateCustomerContactDto createCustomerContactDto)
+        {
+            var customer = (await _customerRepository.FindAsync(c => c.UserId == createCustomerContactDto.Id)).FirstOrDefault() ??
+                throw new KeyNotFoundException("Customer not found");
+
+            var contactType = (await _contactTypeService.GetContactTypeByIdAsync(createCustomerContactDto.ContactTypeId));
+
+            await _customerContactRepository.InsertAsync(new CustomerContact()
+            {
+                ContactTypeId = contactType.Id,
+                CustomerId = customer.UserId,
+                Value = createCustomerContactDto.Value
+            });
         }
     }
 }
