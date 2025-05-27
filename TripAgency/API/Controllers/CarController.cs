@@ -49,7 +49,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<CarDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCarById(BaseDto<int> dto)
+        public async Task<IActionResult> GetCarById([FromQuery]BaseDto<int> dto)
         {
             var car = await _carService.GetCarByIdAsync(dto);
             if (car == null)
