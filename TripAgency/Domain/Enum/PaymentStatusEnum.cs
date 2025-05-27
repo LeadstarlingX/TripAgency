@@ -8,5 +8,8 @@ namespace DataAccessLayer.Enum
 {
     public enum PaymentStatusEnum
     {
+        Pending,
+        complete,
+        refund
     }
 }

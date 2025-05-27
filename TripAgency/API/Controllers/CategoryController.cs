@@ -37,7 +37,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<CategoryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCategoryById(BaseDto<int> dto)
+        public async Task<IActionResult> GetCategoryById([FromQuery]BaseDto<int> dto)
         {
             var category = await _categoryService.GetCategoryByIdAsync(dto);
             if (category == null)
