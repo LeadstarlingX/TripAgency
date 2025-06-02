@@ -22,8 +22,9 @@ using Application.IApplicationServices.Car;
 using Application.IApplicationServices.Category;
 using Infrastructure.ApplicationServices;
 using Infrastructure.ApplicationServices;
-using Application.IApplicationServices.Employee;
-using Infrastructure.ApplicationServices.Employee;
+using Application.IApplicationServices;
+using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Payment;
 
 
 namespace Infrastructure
@@ -45,10 +46,6 @@ namespace Infrastructure
             services.AddScoped(typeof(IIdentityAppRepository<>), typeof(IdentityRepository<>));
             services.AddScoped<IJsonFieldsSerializer, JsonFieldsSerializer>();
             services.AddScoped<DataSeeder>();
-
-
-
-
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -56,7 +53,10 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
+
 
 
             return services;

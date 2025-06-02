@@ -65,7 +65,7 @@ namespace Infrastructure.ApplicationServices
         public async Task<IEnumerable<CarDto>> GetCarsAsync()
         {
 
-            var c = await _carRepositry.GetAllWithAllIncludeAsync();
+            var c = await _carRepositry.GetAllAsync();
             return _mapper.Map<IEnumerable<CarDto>>(c);
         }
 

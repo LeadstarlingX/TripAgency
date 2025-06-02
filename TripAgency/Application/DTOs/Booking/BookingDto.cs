@@ -18,7 +18,7 @@ namespace Application.DTOs.Booking
         public DateTime EndDateTime { get; set; }
         public BookingStatusEnum Status { get; set; }
         public int NumOfPassengers { get; set; }
-        public ICollection<Payment> Payments { get; set; }
+        //public ICollection<PaymentD> Payments { get; set; }
 
     }
 }
