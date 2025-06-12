@@ -13,9 +13,18 @@ namespace Application.Mapping.BookingProfile
     {
         public BookingProfie()
         {
-            CreateMap<Booking, BookingDto>();
-            CreateMap<CreateBookingDto, Booking>();
-            CreateMap<UpdateBookingDto, Booking>();
+            CreateMap<Booking, BookingDto>()
+             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => (int)src.Id))
+
+             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src =>
+                 src.Customer != null ? src.Customer.FirstName+" "+src.Customer.LastName : "N/A"))
+
+             .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src =>
+                 src.Employee != null ? src.Employee.Name : "N/A"));
+            CreateMap<CreateBookingDto, Booking>()
+                      .ForMember(dest => dest.Status, opt => opt.Ignore());
+            CreateMap<UpdateBookingDto, Booking>()
+                        .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
 
     }

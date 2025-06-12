@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Application.DTOs.Common;
+using Application.Common;
 using Domain.Common;
 using Newtonsoft.Json;
 
