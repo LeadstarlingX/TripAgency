@@ -4,6 +4,7 @@ using Domain.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612105718_MakeEmpIdInBookingNullable")]
+    partial class MakeEmpIdInBookingNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace Domain.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
 
-                    b.Property<long?>("Employeeid")
+                    b.Property<long>("Employeeid")
                         .HasColumnType("bigint")
                         .HasColumnName("employee_id");
 
@@ -62,7 +65,7 @@ namespace Domain.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 6, 12, 15, 27, 34, 983, DateTimeKind.Local).AddTicks(983))
+                        .HasDefaultValue(new DateTime(2025, 6, 12, 13, 57, 17, 868, DateTimeKind.Local).AddTicks(6693))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
@@ -599,7 +602,7 @@ namespace Domain.Migrations
                     b.Property<DateTime>("PublishDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 6, 12, 15, 27, 34, 987, DateTimeKind.Local).AddTicks(9427))
+                        .HasDefaultValue(new DateTime(2025, 6, 12, 13, 57, 17, 873, DateTimeKind.Local).AddTicks(4457))
                         .HasColumnName("publish_date");
 
                     b.Property<string>("Slug")

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Common;
+using Application.DTOs.Authentication;
 using Application.DTOs.Booking;
 using Application.Filter;
 
@@ -32,7 +33,7 @@ namespace Application.IApplicationServices.Booking
         /// </summary>
         /// <param name="createCarDto">The create car dto.</param>
         /// <returns></returns>
-        Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto);
+        Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto, UserProfileDto currentUser);
         /// <summary>
         /// Updates the booking asynchronous.
         /// </summary>
@@ -45,5 +46,7 @@ namespace Application.IApplicationServices.Booking
         /// <param name="dto">The dto.</param>
         /// <returns></returns>
         Task DeleteBookingByIdAsync(BaseDto<int> dto);
+        Task<BookingDto> ConfirmBookingAsync(int bookingId, long employeeId);
+
     }
 }

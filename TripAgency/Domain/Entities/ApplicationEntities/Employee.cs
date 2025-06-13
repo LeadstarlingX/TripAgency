@@ -15,8 +15,8 @@ namespace Domain.Entities.ApplicationEntities
         }
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
 

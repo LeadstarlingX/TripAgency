@@ -1,9 +1,11 @@
 ﻿using Application.Common;
+using Application.DTOs.Authentication;
 using Application.DTOs.Booking;
 using Application.Filter;
 using Application.IApplicationServices.Booking;
 using Application.IReositosy;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities.ApplicationEntities;
 using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
@@ -12,21 +14,40 @@ using System.Linq.Expressions;
 public class BookingService : IBookingService
 {
     private readonly IAppRepository<Booking> _bookingRepository;
+    private readonly IAppRepository<Employee> _employeeRepository;
     private readonly IMapper _mapper;
 
-    public BookingService(IAppRepository<Booking> bookingRepository, IMapper mapper)
+    public BookingService(IAppRepository<Booking> bookingRepository,IAppRepository<Employee> repository, IMapper mapper)
     {
         _bookingRepository = bookingRepository;
         _mapper = mapper;
+        _employeeRepository = repository;
     }
 
-    public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
+    public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto, UserProfileDto currentUser)
     {
-       
         var bookingEntity = _mapper.Map<Booking>(createBookingDto);
         bookingEntity.Status = BookingStatusEnum.Pending;
 
         var newBooking = await _bookingRepository.InsertAsync(bookingEntity);
+
+        // Check if user is not a Customer
+        if (currentUser.Token != null &&
+            !currentUser.Token.UserRoles.Any(r => r.Equals(DefaultSetting.CustomerRoleName, StringComparison.OrdinalIgnoreCase)))
+        {
+            if (currentUser.Token.UserRoles.Contains(DefaultSetting.AdminRoleName) ||  currentUser.Token.UserRoles.Contains(DefaultSetting.EmployeeRoleName))
+            {
+                var employee = (await _employeeRepository.FindAsync(e => e.UserId == currentUser.Id)).FirstOrDefault();
+
+                if (employee != null)
+                {
+                    newBooking.Employeeid = employee.UserId;
+                    newBooking.Status = BookingStatusEnum.InProgress;
+
+                    await _bookingRepository.UpdateAsync(newBooking);
+                }
+            }
+        }
 
         return await GetBookingByIdAsync(new BaseDto<int> { Id = (int)newBooking.Id });
     }
@@ -53,12 +74,8 @@ public class BookingService : IBookingService
 
     public async Task<BookingDto> GetBookingByIdAsync(BaseDto<int> id)
     {
-        Func<IQueryable<Booking>, IQueryable<Booking>> includeExpression =
-            query => query.Include(b => b.Customer).Include(b => b.Employee);
+        var booking =(await _bookingRepository.FindAsync(b => b.Id == id.Id,b => b.Customer!, b => b.Employee!)).FirstOrDefault();
 
-        var booking = await _bookingRepository
-            .FindWithComplexIncludes(b => b.Id == id.Id, includeExpression)
-            .FirstOrDefaultAsync();
 
         if (booking == null)
         {
@@ -81,8 +98,7 @@ public class BookingService : IBookingService
                 query = query.Where(b => b.Employeeid == filter.EmployeeId.Value);
 
             if (!string.IsNullOrEmpty(filter.BookingType))
-                query = query.Where(b => b.BookingType == filter.BookingType);
-
+                query = query.Where(b => b.BookingType!.Trim().ToLower() == filter.BookingType.Trim().ToLower());
             if (filter.Status.HasValue)
                 query = query.Where(b => b.Status == filter.Status.Value);
 
@@ -105,7 +121,7 @@ public class BookingService : IBookingService
     {
         var bookingToDelete = (await _bookingRepository.FindAsync(b => b.Id == dto.Id)).FirstOrDefault();
 
-        if (bookingToDelete == null)
+        if (bookingToDelete is null)
         {
             throw new KeyNotFoundException($"Booking with ID {dto.Id} not found.");
         }
@@ -116,5 +132,27 @@ public class BookingService : IBookingService
         }
 
         await _bookingRepository.RemoveAsync(bookingToDelete);
+    }
+
+    public async Task<BookingDto> ConfirmBookingAsync(int bookingId, long employeeId)
+    {
+        var booking = (await _bookingRepository.FindAsync(b => b.Id == bookingId)).FirstOrDefault();
+
+        if (booking == null)
+        {
+            throw new KeyNotFoundException($"Booking with ID {bookingId} not found.");
+        }
+
+        if (booking.Status != BookingStatusEnum.Pending)
+        {
+            throw new InvalidOperationException("Only pending bookings can be confirmed.");
+        }
+
+        booking.Employeeid = employeeId;
+        booking.Status = BookingStatusEnum.InProgress;
+
+        await _bookingRepository.UpdateAsync(booking);
+
+        return _mapper.Map<BookingDto>(booking);
     }
 }

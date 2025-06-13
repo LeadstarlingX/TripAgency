@@ -56,7 +56,7 @@ namespace Infrastructure.Repository
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _entities;
-            if (navigationProperties is not null)
+            if (navigationProperties is not null && !navigationProperties.Any())
                 foreach (var navigationProperty in navigationProperties)
                     query = query.Include(navigationProperty);
 

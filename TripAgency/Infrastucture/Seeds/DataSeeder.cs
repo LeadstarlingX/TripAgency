@@ -62,99 +62,111 @@ namespace Infrastructure.Seeds
 
             if (!_identityAppDbContext.Users.Any(u => u.Email == DefaultSetting.DefaultAdminOneEmail))
             {
-                var newUser = new ApplicationUser()
+                var adminUser = new ApplicationUser
                 {
                     Email = DefaultSetting.DefaultAdminOneEmail,
-                    UserName = DefaultSetting.AdminRoleName,
+                    UserName = DefaultSetting.DefaultAdminOneUserName,
                     PhoneNumber = DefaultSetting.DefaultAdminOnePhone,
                     PhoneNumberConfirmed = true,
                     IsActive = true
                 };
 
-                var isCreated = _userManager.CreateAsync(newUser, DefaultSetting.DefaultAdminPassword).GetAwaiter().GetResult();
-                if (isCreated.Succeeded)
+                var result = _userManager.CreateAsync(adminUser, DefaultSetting.DefaultAdminPassword).GetAwaiter().GetResult();
+
+                if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(newUser, DefaultSetting.AdminRoleName).GetAwaiter().GetResult();
-                    var code = _userManager.GenerateEmailConfirmationTokenAsync(newUser).GetAwaiter().GetResult();
-                    _userManager.ConfirmEmailAsync(newUser, code).GetAwaiter().GetResult();
+                    _userManager.AddToRoleAsync(adminUser, DefaultSetting.AdminRoleName).GetAwaiter().GetResult();
+                    var code = _userManager.GenerateEmailConfirmationTokenAsync(adminUser).GetAwaiter().GetResult();
+                    _userManager.ConfirmEmailAsync(adminUser, code).GetAwaiter().GetResult();
                 }
+
                 shouldUpdateContext = true;
             }
+            if (shouldUpdateContext)
+            {
+                _identityAppDbContext.SaveChanges();
+                shouldUpdateContext = false;
+            }
+            var identityUser = _identityAppDbContext.Users.FirstOrDefault(u => u.Email == DefaultSetting.DefaultAdminOneEmail);
+            if (identityUser == null)
+            {
+                throw new InvalidOperationException("Admin user not found after seeding.");
+            }
 
+            var adminUserId = identityUser.Id;
+
+            // Seed ContactTypes
             if (!_context.ContactTypes.Any())
             {
-                shouldUpdateContext = true;
-
                 var contactTypes = Enum.GetValues<ContactTypeEnum>()
                     .Select(type => new ContactType { Type = type })
                     .ToList();
 
                 _context.ContactTypes.AddRange(contactTypes);
-            }
-            if (!_context.Customers.Any())
-            {
-                Customer customer;
-                customer = new Customer
-                {
-                    FirstName = "ahmad",
-                    LastName = "amen",
-                    UserId = 1,
-                    Country = "damas"
-
-                };
-                shouldUpdateContext = true;
-
-            }
-            if (!_context.Employees.Any())
-            {
-                Employee employee;
-
-                employee =new Employee
-                {
-                   HireDate = DateTime.Now,
-                   UserId= 1,
-                };
                 shouldUpdateContext = true;
             }
-            //if (!_context.Bookings.Any())
-            //{
-            //    Booking booking;
-            //    booking = new Booking
-            //    {
 
-            //        Status = BookingStatusEnum.Pending,
-            //        CustomerId = 1,
-            //        Employeeid = 1,
-            //        NumOfPassengers = 6,
-            //        BookingType = "carBooking",
-            //        StartDateTime = DateTime.Now,
-            //        EndDateTime = DateTime.MaxValue,
-            //    };
-            //    _context.Bookings.Add(booking);
-            //    shouldUpdateContext = true;
-            //}
-            //if (!_context.Payments.Any())
-            //{
-            //    Payment payment;
-            //    payment = new Payment
-            //    {
+            // Seed Customer (linked to Identity User)
+            if (!_context.Customers.Any(c => c.UserId == adminUserId))
+            {
+                var customer = new Customer
+                {                    
+                    FirstName = DefaultSetting.DefaultAdminOneFName,
+                    LastName = DefaultSetting.DefaultAdminOneLName,
+                    UserId = adminUserId,
+                    Country = "Damascus"
+                };
 
-            //        Status = PaymentStatusEnum.Pending,
-            //        BookingId = 1,
-            //        AmountDue = 1000,
-            //        AmountPaid = 0,
-            //        PaymentDate = DateTime.Now,
-            //        Notes = "  ",
+                _context.Customers.Add(customer);
+                shouldUpdateContext = true;
+            }
 
-            //    };
-                //_context.Payments.Add(payment);
-                //shouldUpdateContext = true;
-            //}
+            // Seed Employee (linked to Identity User)
+            if (!_context.Employees.Any(e => e.UserId == adminUserId))
+            {
+                var employee = new Employee
+                {
+                    HireDate = DateTime.Now,
+                    UserId = adminUserId
+                };
+
+                _context.Employees.Add(employee);
+                shouldUpdateContext = true;
+            }
             
+            if (!_context.Bookings.Any())
+            {
+                var bookings = new List<Booking>
+                {
+                    new Booking
+                    {
+                        CustomerId = adminUserId,
+                        Employeeid = adminUserId,
+                        BookingType = "Car Rental",
+                        StartDateTime = DateTime.Now.AddDays(1),
+                        EndDateTime = DateTime.Now.AddDays(2),
+                        Status = BookingStatusEnum.Pending,
+                        NumOfPassengers = 2
+                    },
+                    new Booking
+                    {
+                        CustomerId = 1,
+                        BookingType = "Event Booking",
+                        StartDateTime = DateTime.Now.AddDays(-5),
+                        EndDateTime = DateTime.Now.AddDays(-3),
+                        Status = BookingStatusEnum.Completed,
+                        NumOfPassengers = 6
+                    }
+                };
+
+                _context.Bookings.AddRange(bookings);
+                shouldUpdateContext = true;
+            }
 
             if (shouldUpdateContext)
             {
                 shouldUpdateContext = false;
+                _identityAppDbContext.SaveChanges();
                 _context.SaveChanges();
             }
         }

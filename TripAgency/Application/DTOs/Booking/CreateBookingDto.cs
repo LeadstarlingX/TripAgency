@@ -15,9 +15,8 @@ namespace Application.DTOs.Booking
         [Range(1, long.MaxValue, ErrorMessage = "Please provide a valid Customer ID.")]
         public long CustomerId { get; set; }
 
-        [Required(ErrorMessage = "Employee ID is required.")]
         [Range(1, long.MaxValue, ErrorMessage = "Please provide a valid Employee ID.")]
-        public long EmployeeId { get; set; }
+        public long? EmployeeId { get; set; }
 
         [StringLength(100, ErrorMessage = "Booking Type cannot exceed 100 characters.")]
         public string? BookingType { get; set; }

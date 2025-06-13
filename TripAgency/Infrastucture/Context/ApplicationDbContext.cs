@@ -67,7 +67,8 @@ namespace Domain.Context
                 .HasColumnName("customer_id");
 
                 b.Property(b => b.Employeeid)
-                .HasColumnName("employee_id");
+                .HasColumnName("employee_id")                
+                .IsRequired(false);
 
                 b.Property(b => b.StartDateTime)
                 .HasColumnName("start_date_time")

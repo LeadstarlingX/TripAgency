@@ -26,7 +26,6 @@ namespace Domain.Enum
         Completed = 4,
 
         // The booking was cancelled. This is a final state.
-        // You might want to store the reason for cancellation elsewhere.
         Cancelled = 5,
 
         // The customer did not show up for the booking at the scheduled time.
