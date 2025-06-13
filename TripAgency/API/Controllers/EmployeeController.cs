@@ -14,6 +14,7 @@ namespace API.Controllers
     using Application.DTOs.Actions;
     using Application.DTOs.Customer;
     using Application.Common;
+    using Application.IApplicationServices.Customer;
 
     namespace API.Controllers
     {
@@ -23,13 +24,16 @@ namespace API.Controllers
         public class EmployeeController : BaseAuthenticatedController
         {
             private readonly IEmployeeService _employeeService;
+            private readonly ICustomerService _customerService; 
 
             public EmployeeController(
                 IAuthenticationService authenticationService,
                 IJsonFieldsSerializer jsonFieldsSerializer,
-                IEmployeeService employeeService) : base(authenticationService, jsonFieldsSerializer)
+                IEmployeeService employeeService,
+                ICustomerService customerService) : base(authenticationService, jsonFieldsSerializer)
             {
                 _employeeService = employeeService;
+                _customerService = customerService;
             }
 
             [HttpGet]
@@ -46,6 +50,7 @@ namespace API.Controllers
             public async Task<IActionResult> CreateEmployeeAsync([FromBody] CreateEmployeeDto dto)
             {
                 dto.Id = await _authenticationService.RegisterAsync(dto.UserDto);
+                await _customerService.CreateCustomerAsync(new CreateCustomerDto() { UserDto = dto.UserDto, Id = dto.Id});
                 var result = await _employeeService.CreateEmployeeAsync(dto);
                 return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Employee created successfully", StatusCodes.Status201Created, result), string.Empty));
             }
