@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-﻿using System;
-=======
 ﻿using Application.DTOs.CarBooking;
 using AutoMapper;
 using Domain.Entities.ApplicationEntities;
 using System;
->>>>>>> AlaaWork
 using System.Collections.Generic;
 using System.Linq;
 

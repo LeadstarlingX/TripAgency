@@ -12,16 +12,7 @@ namespace Application.DTOs.Booking
 {
     public class UpdateBookingDto : BaseDto<int>
     {
-<<<<<<< HEAD
-        public long CustomerId { get; set; }
-        public long EmployeeId { get; set; }
-        public string? BookingType { get; set; }
-        public DateTime StartDateTime { get; set; } = DateTime.MinValue;
-        public DateTime EndDateTime { get; set; } = DateTime.MinValue;
-        public BookingStatusEnum Status { get; set; }
-        public int NumOfPassengers { get; set; }
-        public ICollection<Payment>? Payments { get; set; }
-=======
+
         public string? BookingType { get; set; }
         public DateTime? StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }
@@ -29,6 +20,5 @@ namespace Application.DTOs.Booking
         public BookingStatusEnum? Status { get; set; }
         [Range(1, 100, ErrorMessage = "Number of passengers must be between 1 and 100.")]
         public int? NumOfPassengers { get; set; }
->>>>>>> AlaaWork
     }
 }

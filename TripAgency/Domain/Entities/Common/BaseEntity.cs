@@ -54,12 +54,7 @@ namespace Domain.Entities.Common
 
         public override int GetHashCode()
         {
-<<<<<<< HEAD
-            return Id.GetHashCode();
-=======
            return  Id.GetHashCode();
-            
->>>>>>> AlaaWork
         }
     }
 }

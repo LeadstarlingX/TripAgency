@@ -126,7 +126,6 @@ namespace API.Controllers
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "Booking confirmed successfully.", StatusCodes.Status200OK, result),
                     string.Empty));
->>>>>>> AlaaWork
         }
     }
 }

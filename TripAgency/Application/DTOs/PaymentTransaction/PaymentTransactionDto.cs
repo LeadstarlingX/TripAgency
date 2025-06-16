@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿using Application.DTOs.Common;
-=======
-﻿using Application.Common;
->>>>>>> AlaaWork
+using Application.Common;
 using Domain.Entities.ApplicationEntities;
 using Domain.Enum;
 using System;
