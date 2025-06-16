@@ -26,44 +26,13 @@ namespace API.Controllers
             _bookingService = bookingService;
         }
 
-<<<<<<< HEAD
-        #region Get
-        /// <summary>
-        /// Gets all bookings.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize]
-=======
+
         #region GET
 
->>>>>>> AlaaWork
         [HttpGet]
         public async Task<IActionResult> GetAllBookings()
         {
-<<<<<<< HEAD
-            var result = await _bookingService.GetByFilterAsync(null);
 
-            if (result == null)
-                return new RawJsonActionResult(
-                    _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(true, "There are no bookings", StatusCodes.Status200OK),
-                        string.Empty));
-
-            return new RawJsonActionResult(
-                    _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(true, "", StatusCodes.Status200OK, result),
-                        string.Empty));
-            
-        }
-
-
-        /// <summary>
-        /// Gets all bookings by filter.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns></returns>
-        //[Authorize]
-=======
             var result = await _bookingService.GetBookingsByFilterAsync(null);
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
@@ -71,63 +40,18 @@ namespace API.Controllers
                     string.Empty));
         }
 
->>>>>>> AlaaWork
         [HttpGet]
         public async Task<IActionResult> GetAllBookingsByFilter([FromQuery] BookingFilter filter)
         {
-<<<<<<< HEAD
 
-            var result = await _bookingService.GetByFilterAsync(filter);
-
-            if (result == null)
-                return new RawJsonActionResult(
-                    _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(true, "There are no bookings", StatusCodes.Status200OK),
-                        string.Empty));
-
-=======
             var result = await _bookingService.GetBookingsByFilterAsync(filter);
->>>>>>> AlaaWork
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "", StatusCodes.Status200OK, result),
                     string.Empty));
         }
 
-<<<<<<< HEAD
 
-        /// <summary>
-        /// Gets the booking by identifier.
-        /// </summary>
-        /// <param name="dto">The dto.</param>
-        /// <returns></returns>
-        //[Authorize]
-        [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<List<BookingDto>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] BaseDto<int> dto)
-        {
-            try
-            {
-                var result = await _bookingService.GetByIdAsync(dto);
-
-                return new RawJsonActionResult(
-                        _jsonFieldsSerializer.Serialize(
-                            new ApiResponse(true, "", StatusCodes.Status200OK, result),
-                            string.Empty));
-
-            }
-
-            catch (Exception)
-            {
-                return new RawJsonActionResult(
-                    _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(false, "There are no such booking", StatusCodes.Status400BadRequest),
-                        string.Empty));
-            }
-=======
         [HttpGet]
         public async Task<IActionResult> GetBookingById([FromQuery]BaseDto<int> dto)
         {
@@ -136,81 +60,25 @@ namespace API.Controllers
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "", StatusCodes.Status200OK, result),
                     string.Empty));
->>>>>>> AlaaWork
         }
 
         #endregion
 
-<<<<<<< HEAD
-        /// <summary>
-        /// Updates the booking.
-        /// </summary>
-        /// <param name="dto">The dto.</param>
-        /// <returns></returns>
-        //[Authorize]
-        [HttpPut]
-        [ProducesResponseType(typeof(ApiResponse<List<BookingDto>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateBooking([FromQuery] UpdateBookingDto dto)
-        {
-            var result = await _bookingService.UpdateAsync(dto);
 
-            return new RawJsonActionResult(
-                _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "", StatusCodes.Status200OK, result),
-                    string.Empty));
-        }
-
-
-        /// <summary>
-        /// Creates the booking.
-        /// </summary>
-        /// <param name="dto">The dto.</param>
-        /// <returns></returns>
-        //[Authorize]
-=======
         #region POST
 
->>>>>>> AlaaWork
         [HttpPost]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto dto)
         {
-<<<<<<< HEAD
-            await _bookingService.CreateAsync(dto);
 
-=======
             var result = await _bookingService.CreateBookingAsync(dto,await _authenticationService.GetAuthenticatedUser());
->>>>>>> AlaaWork
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "Booking created successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
 
-<<<<<<< HEAD
-        /// <summary>
-        /// Deletes the booking by identifier.
-        /// </summary>
-        /// <param name="dto">The dto.</param>
-        /// <returns></returns>
-        //[Authorize]
-        [HttpDelete]
-        [ProducesResponseType(typeof(ApiResponse<List<BookingDto>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult DeleteBookingById([FromQuery] BaseDto<int> dto)
-        {
 
-            _bookingService.DeleteByIdAsync(dto);
-            return new RawJsonActionResult(
-                _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "", StatusCodes.Status200OK),
-                    string.Empty));
-
-=======
         #endregion
 
         #region PUT
