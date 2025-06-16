@@ -2,6 +2,7 @@
 using Application.DTOs;
 using Application.DTOs.SeoMetaData;
 using Application.DTOs.SeoMetaDataDto;
+using Application.IApplicationServices;
 using Application.IApplicationServices.SeoMetaData;
 using Application.IReositosy;
 using AutoMapper;
