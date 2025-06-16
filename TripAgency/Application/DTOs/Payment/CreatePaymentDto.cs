@@ -14,8 +14,9 @@ namespace Application.DTOs.Payment
         public PaymentStatusEnum Status { get; set; }
         //public decimal AmountDue { get; set; }
         //public decimal AmountPaid { get; set; }
-        public DateTime PaymentDate { get; set; }
+        //public DateTime PaymentDate { get; set; }
         public string Notes { get; set; } = string.Empty;
+
      //   public Booking? Booking { get; set; } // Navigation
 
     }
