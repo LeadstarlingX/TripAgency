@@ -74,7 +74,7 @@ public class BookingService : IBookingService
 
     public async Task<BookingDto> GetBookingByIdAsync(BaseDto<int> id)
     {
-        var booking =(await _bookingRepository.FindAsync(b => b.Id == id.Id,b => b.Customer!, b => b.Employee!)).FirstOrDefault();
+        var booking =(await _bookingRepository.FindAsync(b => b.Id == id.Id,false, b => b.Customer!, b => b.Employee!)).FirstOrDefault();
 
 
         if (booking == null)
@@ -87,7 +87,7 @@ public class BookingService : IBookingService
 
     public async Task<IEnumerable<BookingDto>> GetBookingsByFilterAsync(BookingFilter? filter)
     {
-        var query = _bookingRepository.GetAll(b => b.Customer!, b => b.Employee!);
+        var query = _bookingRepository.GetAll(false,b => b.Customer!, b => b.Employee!);
 
         if (filter != null)
         {

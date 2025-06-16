@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCarBooking([FromBody] CreateCarBookingDto dto)
         {
-            var car = await _carService.GetCarByIdAsync(new BaseDto<int> { Id = dto.CarId });
+            var car = (await _carService.GetCarByIdAsync(new BaseDto<int> { Id = dto.CarId }));
             if (car == null)
                 throw new KeyNotFoundException($"Car with ID {dto.CarId} not found.");
             if (car.CarStatus == CarStatusEnum.NotAvailable)
@@ -61,7 +61,6 @@ namespace API.Controllers
                 DropoffLocation = dto.DropoffLocation,
                 WithDriver = dto.WithDriver
             };
-
             var result = await _carBookingService.CreateCarBookingAsync(carBooking);
             if (result is not null)
             {
@@ -70,7 +69,7 @@ namespace API.Controllers
                     Id = car.Id,
                     CarStatus = CarStatusEnum.NotAvailable
                 };
-                await _carService.UpdateCarAsync(updateCar);
+                await _carService.UpdateCarAsync(updateCar, true);
             }
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(

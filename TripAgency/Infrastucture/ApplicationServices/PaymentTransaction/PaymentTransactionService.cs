@@ -102,14 +102,14 @@ namespace Infrastructure.ApplicationServices
 
             public  async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto)
         {
-            var p = await _paymenttransaction.FindAsync(x => x.PaymentId == dto.Id, x => x.Payment);
+            var p = await _paymenttransaction.FindAsync(x => x.PaymentId == dto.Id, false, x => x.Payment!);
             return _mapper.Map<IEnumerable<PaymentTransactionDto>>(p);
 
         }
 
          public async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionDtosByMethod(BaseDto<int> dto)
         {
-            var t = await _paymenttransaction.FindAsync(x => x.PaymentMethodId == dto.Id, p => p.PaymentMethod);
+            var t = await _paymenttransaction.FindAsync(x => x.PaymentMethodId == dto.Id, false, p => p.PaymentMethod!);
 
             return _mapper.Map<IEnumerable<PaymentTransactionDto>>(t);
         }
