@@ -52,7 +52,7 @@ namespace Infrastructure.ApplicationServices
 
         public async Task<CarDto> GetCarByIdAsync(BaseDto<int> dto)
         {
-            var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
+            var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id, true)).FirstOrDefault();
             if (car == null)
             {
                 throw new KeyNotFoundException("Car Not Found");
@@ -69,14 +69,14 @@ namespace Infrastructure.ApplicationServices
             return _mapper.Map<IEnumerable<CarDto>>(c);
         }
 
-        public async Task<CarDto> UpdateCarAsync(UpdateCarDto updatecarDto)
+        public async Task<CarDto> UpdateCarAsync(UpdateCarDto updatecarDto, bool asNoTracking = false)
         {
-            var c = await _carRepositry.UpdateAsync(_mapper.Map<Car>(updatecarDto));
+            var c = await _carRepositry.UpdateAsync(_mapper.Map<Car>(updatecarDto), asNoTracking);
             return _mapper.Map<CarDto>(c);
         }
         public async Task<IEnumerable<CarDto>> GetCarsByCategory(string category)
         {
-            var result = await _carRepositry.FindAsync(x => x.Category!.Title == category, x=> x.Category!);
+            var result = await _carRepositry.FindAsync(x => x.Category!.Title == category,false, x=> x.Category!);
 
             if (result==null)
             {

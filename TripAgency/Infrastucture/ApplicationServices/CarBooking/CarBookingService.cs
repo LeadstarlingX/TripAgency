@@ -45,7 +45,7 @@ namespace Infrastructure.ApplicationServices.CarBooking
 
         public async Task DeleteCarBookingAsync(BaseDto<int> dto)
         {
-            var carBooking =( await _carBookingRepository.FindAsync(cb => cb.BookingId == dto.Id, cb => cb.Booking!,cb => cb.Car!)).FirstOrDefault();
+            var carBooking =( await _carBookingRepository.FindAsync(cb => cb.BookingId == dto.Id, false, cb => cb.Booking!,cb => cb.Car!)).FirstOrDefault();
             if (carBooking == null)
                 throw new KeyNotFoundException($"CarBooking with ID {dto.Id} not found.");     
             
@@ -60,7 +60,7 @@ namespace Infrastructure.ApplicationServices.CarBooking
 
         public async Task<CarBookingDto> GetCarBookingByIdAsync(BaseDto<int> dto)
         {
-            var carBooking = (await _carBookingRepository.FindAsync(cb => cb.BookingId == dto.Id, cb => cb.Booking!,cb => cb.Car!)).FirstOrDefault();
+            var carBooking = (await _carBookingRepository.FindAsync(cb => cb.BookingId == dto.Id, false, cb => cb.Booking!,cb => cb.Car!)).FirstOrDefault();
             if(carBooking == null)
                 throw new KeyNotFoundException($"CarBooking with ID {dto.Id} not found.");
 
@@ -69,7 +69,7 @@ namespace Infrastructure.ApplicationServices.CarBooking
 
         public async Task<IEnumerable<CarBookingDto>> GetCarBookingsByFilterAsync(CarBookingFilter? filter)
         {
-            var carBookings = await _carBookingRepository.GetAll(
+            var carBookings = await _carBookingRepository.GetAll(false,
                 cb => cb.Booking!,
                 cb => cb.Car!
             ).ToListAsync();
