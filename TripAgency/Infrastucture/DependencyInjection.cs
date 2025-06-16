@@ -29,6 +29,7 @@ using Application.IApplicationServices.Payment;
 using Application.IApplicationServices.Booking;
 using Application.IApplicationServices.CarBooking;
 using Infrastructure.ApplicationServices.CarBooking;
+using Infrastructure.ApplicationServices.SeoMetaData;
 
 
 namespace Infrastructure
@@ -62,6 +63,11 @@ namespace Infrastructure
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ICarBookingService, CarBookingService>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IPostTypeService, PostTypeService>();
+            services.AddScoped<IPostTagService, PostTagService>();
+            services.AddScoped<ISeoMetaDataService, SeoMetaDataService>();
+            services.AddScoped<ITagService, TagService>();
 
 
 
