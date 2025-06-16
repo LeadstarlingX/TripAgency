@@ -8,14 +8,11 @@ using System;
 >>>>>>> AlaaWork
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-<<<<<<< HEAD
+
 using Application.DTOs.CarBooking;
 using AutoMapper;
 using Domain.Entities.ApplicationEntities;
-=======
->>>>>>> AlaaWork
+
 
 namespace Application.Mapping.CarBookingProfile
 {
@@ -23,13 +20,7 @@ namespace Application.Mapping.CarBookingProfile
     {
         public CarBookingProfile()
         {
-<<<<<<< HEAD
-            CreateMap<CarBooking, CarBookingDto>();
-            CreateMap<CreateCarBookingDto, CarBooking>();
-            CreateMap<UpdateCarBookingDto, CarBooking>();
-        }
-        
-=======
+
             CreateMap<CarBooking, CarBookingDto>()
             .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.BookingId))
             .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.CarId))
@@ -48,6 +39,5 @@ namespace Application.Mapping.CarBookingProfile
                .ForMember(dest => dest.DropoffLocation, opt => opt.MapFrom(src => src.DropoffLocation))
                .ForMember(dest => dest.WithDriver, opt => opt.MapFrom(src => src.WithDriver));
         }
->>>>>>> AlaaWork
     }
 }
