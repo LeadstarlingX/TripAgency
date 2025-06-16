@@ -26,6 +26,8 @@ using Application.IApplicationServices;
 using Application.IApplicationServices.PaymentTransaction;
 using Application.IApplicationServices.Payment;
 using Application.IApplicationServices.Booking;
+using Application.IApplicationServices.CarBooking;
+using Infrastructure.ApplicationServices.CarBooking;
 
 
 namespace Infrastructure
@@ -58,6 +60,7 @@ namespace Infrastructure
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
             services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<ICarBookingService, CarBookingService>();
 
 
 

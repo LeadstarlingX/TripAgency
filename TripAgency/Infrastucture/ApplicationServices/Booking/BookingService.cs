@@ -31,7 +31,6 @@ public class BookingService : IBookingService
 
         var newBooking = await _bookingRepository.InsertAsync(bookingEntity);
 
-        // Check if user is not a Customer
         if (currentUser.Token != null &&
             !currentUser.Token.UserRoles.Any(r => r.Equals(DefaultSetting.CustomerRoleName, StringComparison.OrdinalIgnoreCase)))
         {

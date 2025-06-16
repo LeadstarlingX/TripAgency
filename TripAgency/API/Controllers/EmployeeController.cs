@@ -18,7 +18,6 @@ namespace API.Controllers
 
     namespace API.Controllers
     {
-        [Route("api/[controller]/[action]")]
         [ApiController]
         [Authorize(Roles = ApiConsts.AdminRoleName)]
         public class EmployeeController : BaseAuthenticatedController

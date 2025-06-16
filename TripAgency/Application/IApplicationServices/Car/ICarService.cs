@@ -23,9 +23,5 @@ namespace Application.IApplicationServices.Car
         Task<IEnumerable<CarDto>> GetCarsByCategory(string category);
 
         Task<IEnumerable<CarDto>> FilterCar(CarFilter filter);
-
-
-
-
     }
 }

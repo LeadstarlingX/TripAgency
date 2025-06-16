@@ -53,7 +53,7 @@ namespace Infrastructure.ApplicationServices
         public async Task<CarDto> GetCarByIdAsync(BaseDto<int> dto)
         {
             var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
-            if (car==null)
+            if (car == null)
             {
                 throw new KeyNotFoundException("Car Not Found");
 
