@@ -36,7 +36,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCarBooking([FromBody] CreateCarBookingDto dto)
         {
-            var car = await _carService.GetCarByIdAsync(new BaseDto<int> { Id = dto.CarId });
+            var car = (await _carService.GetCarByIdAsync(new BaseDto<int> { Id = dto.CarId }));
             if (car == null)
                 throw new KeyNotFoundException($"Car with ID {dto.CarId} not found.");
             if (car.CarStatus == CarStatusEnum.NotAvailable)
@@ -62,17 +62,17 @@ namespace API.Controllers
                 DropoffLocation = dto.DropoffLocation,
                 WithDriver = dto.WithDriver
             };
-
+            car.CarStatus = CarStatusEnum.NotAvailable;
             var result = await _carBookingService.CreateCarBookingAsync(carBooking);
-            if (result is not null)
-            {
-                var updateCar = new UpdateCarDto()
-                {
-                    Id = car.Id,
-                    CarStatus = CarStatusEnum.NotAvailable
-                };
-                await _carService.UpdateCarAsync(updateCar);
-            }
+            //if (result is not null)
+            //{
+            //    var updateCar = new UpdateCarDto()
+            //    {
+            //        Id = car.Id,
+            //        CarStatus = CarStatusEnum.NotAvailable
+            //    };
+            //    await _carService.UpdateCarAsync(updateCar);
+            //}
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "Car booking created successfully", StatusCodes.Status200OK, result),

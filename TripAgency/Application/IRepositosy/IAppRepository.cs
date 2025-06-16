@@ -9,20 +9,20 @@ namespace Application.IReositosy
 {
     public interface IAppRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] navigationPropertiesl);
-        IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties);
+        Task<IEnumerable<TEntity>> GetAllAsync(bool asNoTracking = false, params Expression<Func<TEntity, object>>[] navigationPropertiesl);
+        IQueryable<TEntity> GetAll(bool asNoTracking = false, params Expression<Func<TEntity, object>>[] navigationProperties);
 
-        IQueryable<TEntity> GetAllWithAllInclude();
-        Task<IEnumerable<TEntity>> GetAllWithAllIncludeAsync();
+        IQueryable<TEntity> GetAllWithAllInclude(bool asNoTracking = false);
+        Task<IEnumerable<TEntity>> GetAllWithAllIncludeAsync(bool asNoTracking = false);
 
-        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationProperties);
-        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] navigationProperties);
-        Task<IEnumerable<TEntity>> FindWithAllIncludeAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] navigationProperties);
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = false, params Expression<Func<TEntity, object>>[] navigationProperties);
+        Task<IEnumerable<TEntity>> FindWithAllIncludeAsync(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = false);
 
-        Task<TEntity> InsertAsync(TEntity entity);
-        Task<TEntity> UpdateAsync(TEntity entity);
-        Task<TEntity> RemoveAsync(TEntity entity);
+        Task<TEntity> InsertAsync(TEntity entity, bool asNoTracking = false);
+        Task<TEntity> UpdateAsync(TEntity entity, bool asNoTracking = false);
+        Task<TEntity> RemoveAsync(TEntity entity, bool asNoTracking = false);
         IQueryable<TEntity> Table { get; }
-        IQueryable<TEntity> FindWithComplexIncludes(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression);
+        IQueryable<TEntity> FindWithComplexIncludes(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression, bool asNoTracking = false);
     }
 }
