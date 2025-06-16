@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.IApplicationServices.Contact;
 using Application.DTOs.Contact;
-using Application.DTOs.Common;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Common;
 using System.Net;
 using Application.Serializer;
 using Application.DTOs.Actions;
+using Application.Common;
 
 namespace API.Areas.Admin
 {

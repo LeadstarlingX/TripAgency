@@ -1,5 +1,5 @@
-﻿using Application.DTOs;
-using Application.DTOs.Common;
+﻿using Application.Common;
+using Application.DTOs;
 using Application.DTOs.PaymentMethod;
 using Application.DTOs.PaymentTransaction;
 using System;
@@ -17,5 +17,8 @@ namespace Application.IApplicationServices.PaymentTransaction
         Task<PaymentTransactionDto> CreatePaymentTransactionAsync(CreatePaymentTransactionDto createPaymentTranDto);
         Task<PaymentTransactionDto> UpdatePaymentTransaction(UpdatePaymentTransactionDto updatePaymentTranDto);
         Task<PaymentTransactionDto> DeletePaymentTransactionAsync(BaseDto<int> dto);
+        Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto);
+        Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionDtosByMethod(BaseDto<int> dto);
+       
     }
 }

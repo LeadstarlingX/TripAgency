@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Car;
-using Application.DTOs.Common;
+﻿using Application.Common;
+using Application.DTOs.Car;
 using Application.DTOs.Customer;
 using Application.Filter;
 using System;
@@ -23,9 +23,5 @@ namespace Application.IApplicationServices.Car
         Task<IEnumerable<CarDto>> GetCarsByCategory(string category);
 
         Task<IEnumerable<CarDto>> FilterCar(CarFilter filter);
-
-
-
-
     }
 }

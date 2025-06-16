@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Actions;
+﻿using Application.Common;
+using Application.DTOs.Actions;
 using Application.DTOs.Authentication;
-using Application.DTOs.Common;
 using Application.DTOs.Contact;
 using Application.IApplicationServices.Authentication;
 using Application.Serializer;
@@ -31,7 +31,7 @@ namespace BlazorPresentation.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             var result = await _authService.RegisterAsync(registerDto);

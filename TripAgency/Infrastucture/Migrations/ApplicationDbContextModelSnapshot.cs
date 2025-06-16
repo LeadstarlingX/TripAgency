@@ -22,31 +22,6 @@ namespace Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.PostType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(256)")
-                        .HasDefaultValue("")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PostTypes", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.ApplicationEntities.Booking", b =>
                 {
                     b.Property<int>("Id")
@@ -59,17 +34,26 @@ namespace Domain.Migrations
                     b.Property<string>("BookingType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
 
-                    b.Property<long>("Employeeid")
+                    b.Property<long?>("Employeeid")
                         .HasColumnType("bigint")
                         .HasColumnName("employee_id");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("end_date_time");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("NumOfPassengers")
                         .HasColumnType("int")
@@ -78,13 +62,16 @@ namespace Domain.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 4, 18, 9, 55, 33, 296, DateTimeKind.Local).AddTicks(5778))
+                        .HasDefaultValue(new DateTime(2025, 6, 12, 15, 27, 34, 983, DateTimeKind.Local).AddTicks(983))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("status");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -124,10 +111,19 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("color");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("image");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Mbw")
                         .HasColumnType("decimal(12,2)")
@@ -145,6 +141,9 @@ namespace Domain.Migrations
                     b.Property<decimal>("Pph")
                         .HasColumnType("decimal(12,2)")
                         .HasColumnName("pph");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -196,10 +195,22 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -218,10 +229,22 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -249,6 +272,12 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("first_name");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -273,21 +302,36 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasColumnName("contact_type_id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("country");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Value");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContactTypeId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("Value", "CustomerId", "ContactTypeId")
+                        .IsUnique();
 
                     b.ToTable("CustomerContacts", (string)null);
                 });
@@ -298,9 +342,29 @@ namespace Domain.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("hier_date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("UserId");
 
@@ -320,6 +384,15 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasColumnName("carBookingId");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
@@ -329,6 +402,9 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -358,6 +434,15 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasColumnName("bookingId");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Notes")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -373,6 +458,9 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("status");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -390,15 +478,27 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("icon");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Method")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("method");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -421,6 +521,15 @@ namespace Domain.Migrations
                         .HasColumnType("decimal(12,2)")
                         .HasColumnName("amount");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PaymentId")
                         .HasColumnType("int")
                         .HasColumnName("paymentId");
@@ -437,6 +546,9 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("transaction_type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -466,10 +578,19 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("body");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("image");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PostTypeId")
                         .HasColumnType("int")
@@ -478,7 +599,7 @@ namespace Domain.Migrations
                     b.Property<DateTime>("PublishDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 4, 18, 9, 55, 33, 308, DateTimeKind.Local).AddTicks(9442))
+                        .HasDefaultValue(new DateTime(2025, 6, 12, 15, 27, 34, 987, DateTimeKind.Local).AddTicks(9427))
                         .HasColumnName("publish_date");
 
                     b.Property<string>("Slug")
@@ -500,6 +621,9 @@ namespace Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("Views")
                         .ValueGeneratedOnAdd()
@@ -542,11 +666,23 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -565,11 +701,20 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(256)")
                         .HasDefaultValue("")
                         .HasColumnName("description");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("KeyWords")
                         .IsRequired()
@@ -584,6 +729,9 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UrlSlug")
                         .IsRequired()
@@ -606,10 +754,22 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -628,6 +788,9 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -635,9 +798,15 @@ namespace Domain.Migrations
                         .HasDefaultValue("")
                         .HasColumnName("description");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit")
                         .HasColumnName("isAvailable");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("bit")
@@ -655,6 +824,9 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("slug");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -692,6 +864,9 @@ namespace Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("Duration")
                         .HasColumnType("decimal(5,2)")
                         .HasColumnName("duration");
@@ -713,6 +888,12 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("")
                         .HasColumnName("induded_services");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MealsPlan")
                         .IsRequired()
@@ -737,6 +918,9 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasColumnName("tripId");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RegionId");
@@ -759,6 +943,15 @@ namespace Domain.Migrations
                         .HasColumnType("int")
                         .HasColumnName("car_id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(12,2)")
                         .HasColumnName("price");
@@ -766,6 +959,9 @@ namespace Domain.Migrations
                     b.Property<int>("TripPlanId")
                         .HasColumnType("int")
                         .HasColumnName("trip_plan_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -775,6 +971,43 @@ namespace Domain.Migrations
                         .IsUnique();
 
                     b.ToTable("TripPlanCars", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.PostType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValue("")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationEntities.Booking", b =>
@@ -787,9 +1020,7 @@ namespace Domain.Migrations
 
                     b.HasOne("Domain.Entities.ApplicationEntities.Employee", "Employee")
                         .WithMany("Bookings")
-                        .HasForeignKey("Employeeid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Employeeid");
 
                     b.Navigation("Customer");
 
@@ -992,11 +1223,6 @@ namespace Domain.Migrations
                     b.Navigation("TripPlan");
                 });
 
-            modelBuilder.Entity("Domain.Entities.PostType", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("Domain.Entities.ApplicationEntities.Booking", b =>
                 {
                     b.Navigation("CarBooking");
@@ -1079,6 +1305,11 @@ namespace Domain.Migrations
                     b.Navigation("TripBookings");
 
                     b.Navigation("TripPlanCars");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PostType", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

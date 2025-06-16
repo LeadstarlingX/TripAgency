@@ -15,7 +15,7 @@ namespace Domain.Entities.ApplicationEntities
             Payments = new HashSet<Payment>();
         }
         public long CustomerId { get; set; }
-        public long Employeeid { get; set; }
+        public long? Employeeid { get; set; }
 
         public string? BookingType { get; set; }
         public DateTime StartDateTime { get; set; }

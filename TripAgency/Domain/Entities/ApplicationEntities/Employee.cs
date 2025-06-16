@@ -13,6 +13,13 @@ namespace Domain.Entities.ApplicationEntities
             Posts = new HashSet<Post>();
             Bookings = new HashSet<Booking>();
         }
+        public string Name { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+
         public DateTime HireDate { get; set; }
         public long UserId { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Contact;
+﻿using Application.Common;
+using Application.DTOs.Contact;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Customer
 {
-    public class UpdateCustomerContactDto
+    public class UpdateCustomerContactDto : BaseDto<int>
     {
-        public ContactsDto? Contacts { get; set; }
+        public string? Value { get; set; }
     }
 }

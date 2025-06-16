@@ -1,8 +1,9 @@
-﻿using Application.DTOs;
+﻿using Application.Common;
+using Application.DTOs;
 using Application.DTOs.Actions;
-using Application.DTOs.Common;
 using Application.DTOs.PaymentMethod;
 using Application.DTOs.PaymentTransaction;
+
 using Application.IApplicationServices;
 using Application.IApplicationServices.PaymentTransaction;
 using Application.Serializer;
@@ -49,7 +50,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPaymentTransactionById(BaseDto<int> dto)
         {
             var paymenttransaction = await _paymenttransactionService.GetPaymentTransactionByIdAsync(dto);
-            if (paymenttransaction == null)
+            if (paymenttransaction is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -71,7 +72,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreatePaymentTransaction(CreatePaymentTransactionDto dto)
         {
             var result = await _paymenttransactionService.CreatePaymentTransactionAsync(dto);
-            if (result == null)
+            if (result is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -81,7 +82,7 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car created successfully", StatusCodes.Status201Created, result),
+                    new ApiResponse(true, "created successfully", StatusCodes.Status201Created, result),
                     string.Empty));
         }
 
@@ -124,19 +125,41 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car updated successfully", StatusCodes.Status200OK, result),
+                    new ApiResponse(true, "updated successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
 
 
 
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
+
+        public async Task<IActionResult> GetTransactionForPayment(BaseDto<int> dto )
+        { 
+            var result = await _paymenttransactionService.GetPaymentTransactionForPayment(dto);
+            if (result == null)
+            {
+                return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(false,"failed" ,StatusCodes.Status400BadRequest),string.Empty));
+            }
+
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true ,"success", StatusCodes.Status200OK , result),string.Empty));
+
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByPaymentMethod(BaseDto<int> dto)
+        {
+         var result=   _paymenttransactionService.GetPaymentTransactionDtosByMethod(dto);
+           
+            if (result == null)
+            {
+                return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(false, "failed", StatusCodes.Status400BadRequest), string.Empty));
+            }
+
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "success", StatusCodes.Status200OK, result), string.Empty));
 
 
-
-
-
-
-
-
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,11 @@ namespace Domain.Entities.Common
     public abstract class BaseEntity : IEquatable<BaseEntity>
     {
         public int Id { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
 
         public static bool operator ==(BaseEntity? first, BaseEntity? second)
         {
@@ -48,7 +54,12 @@ namespace Domain.Entities.Common
 
         public override int GetHashCode()
         {
+<<<<<<< HEAD
             return Id.GetHashCode();
+=======
+           return  Id.GetHashCode();
+            
+>>>>>>> AlaaWork
         }
     }
 }

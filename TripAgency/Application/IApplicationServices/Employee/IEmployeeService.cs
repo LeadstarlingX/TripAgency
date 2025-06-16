@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.Employee;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ namespace Application.IApplicationServices.Employee
 {
     public interface IEmployeeService
     {
-        Task<EmployeesDto> GetCustomers();
-        Task<EmployeeDto> CreateCustomer(CreateEmployeeDto createEmployeeDto);
-        Task<EmployeeDto> UpdateCustomer(UpdateEmployeeDto updateEmployeeDto);
-        Task DeleteCustomer(BaseDto<long> dto);
+        Task<EmployeesDto> GetEmployeesAsync();
+        Task<EmployeeDto> CreateEmployeeAsync(CreateEmployeeDto dto);
+        Task<EmployeeDto> UpdateEmployeeAsync(UpdateEmployeeDto dto);
+        Task DeleteEmployeeAsync(BaseDto<long> dto);
     }
 }

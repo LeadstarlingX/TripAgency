@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Car;
-using Application.DTOs.Common;
+﻿using Application.Common;
+using Application.DTOs.Car;
 using Application.Filter;
 using Application.IApplicationServices.Car;
 using Application.IReositosy;
@@ -16,14 +16,12 @@ namespace Infrastructure.ApplicationServices
     public class CarService : ICarService
     {
         private readonly IAppRepository<Car> _carRepositry;
-       // private readonly IAppRepository<Category> _categoryRepository;
         private readonly IMapper _mapper;
 
         public CarService(IAppRepository<Car> carRepository ,IMapper mapper)
         {
              _carRepositry = carRepository;
             _mapper = mapper;
-           // _categoryRepository = categoryRpository;
         }
         public async Task<CarDto> CreateCarAsync(CreateCarDto createCarDto)
         {
@@ -48,20 +46,14 @@ namespace Infrastructure.ApplicationServices
 
         public async Task<IEnumerable<CarDto>> GetCarByColor(string color)
         {
-            //    var car = await GetCarsAsync();
-
-            //    var result =car.Where(c=>c.Color == color).FirstOrDefault();
-            //return _mapper.Map<CarDto>(result);
-            var car = await _carRepositry.FindAsync(x => x.Color == color);
-            
+            var car = await _carRepositry.FindAsync(x => x.Color == color);            
             return _mapper.Map<IEnumerable<CarDto>>(car);
-
         }
 
         public async Task<CarDto> GetCarByIdAsync(BaseDto<int> dto)
         {
             var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
-            if (car==null)
+            if (car == null)
             {
                 throw new KeyNotFoundException("Car Not Found");
 
@@ -73,7 +65,7 @@ namespace Infrastructure.ApplicationServices
         public async Task<IEnumerable<CarDto>> GetCarsAsync()
         {
 
-            var c = await _carRepositry.GetAllWithAllIncludeAsync();
+            var c = await _carRepositry.GetAllAsync();
             return _mapper.Map<IEnumerable<CarDto>>(c);
         }
 
@@ -84,14 +76,7 @@ namespace Infrastructure.ApplicationServices
         }
         public async Task<IEnumerable<CarDto>> GetCarsByCategory(string category)
         {
-            //    var c = await _categoryRepository.GetAllWithAllIncludeAsync();
-            //    var result = c.Where(x => x.Title == category).FirstOrDefault();
-
-            //    IEnumerable<Car> cars = result.Cars.ToList();
-
-            //    return _mapper.Map<IEnumerable<CarDto>>(cars);
-
-            var result = await _carRepositry.FindAsync(x => x.Category.Title == category, x=> x.Category);
+            var result = await _carRepositry.FindAsync(x => x.Category!.Title == category, x=> x.Category!);
 
             if (result==null)
             {
@@ -100,8 +85,6 @@ namespace Infrastructure.ApplicationServices
             var c=  _mapper.Map<IEnumerable<CarDto>>(result);
 
             return c;
-
-
         }
 
            public  async  Task<IEnumerable<CarDto>> FilterCar(CarFilter filter)

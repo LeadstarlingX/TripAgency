@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using Application.DTOs.Common;
+=======
+﻿using Application.Common;
+>>>>>>> AlaaWork
 using Domain.Entities.ApplicationEntities;
 using Domain.Enum;
 using System;
@@ -14,7 +18,7 @@ namespace Application.DTOs
         public TransactionTypeEnum TransactionType { get; set; }
         public decimal Amount { get; set; }
         public DateTime TransactionDate { get; set; }
-        public Payment? Payment { get; set; } // Navigation
+       // public Payment payment { get; set; } // Navigation
         //public PaymentMethod? PaymentMethod { get; set; } // Navigat
     }
 }

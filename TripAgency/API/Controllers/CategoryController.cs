@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Actions;
+﻿using Application.Common;
+using Application.DTOs.Actions;
 using Application.DTOs.Category;
-using Application.DTOs.Common;
 using Application.IApplicationServices.Category;
 using Application.Serializer;
 using Microsoft.AspNetCore.Http;
@@ -37,7 +37,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<CategoryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCategoryById(BaseDto<int> dto)
+        public async Task<IActionResult> GetCategoryById([FromQuery]BaseDto<int> dto)
         {
             var category = await _categoryService.GetCategoryByIdAsync(dto);
             if (category == null)

@@ -17,6 +17,8 @@ namespace Domain.Entities.ApplicationEntities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; } = false;
+        public bool IsActive { get; set; } = true;
         public virtual ICollection<CustomerContact> Contacts { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
     }

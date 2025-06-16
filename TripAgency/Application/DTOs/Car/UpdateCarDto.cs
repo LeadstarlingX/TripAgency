@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;

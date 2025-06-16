@@ -25,6 +25,10 @@ using Infrastructure.ApplicationServices;
 using Application.IApplicationServices.Booking;
 using Application.IApplicationServices;
 using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Payment;
+using Application.IApplicationServices.Booking;
+using Application.IApplicationServices.CarBooking;
+using Infrastructure.ApplicationServices.CarBooking;
 
 
 namespace Infrastructure
@@ -46,10 +50,6 @@ namespace Infrastructure
             services.AddScoped(typeof(IIdentityAppRepository<>), typeof(IdentityRepository<>));
             services.AddScoped<IJsonFieldsSerializer, JsonFieldsSerializer>();
             services.AddScoped<DataSeeder>();
-
-
-
-
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -57,9 +57,12 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICategoryService, CategoryService>();
-           
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
+            services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<ICarBookingService, CarBookingService>();
+
 
 
             return services;

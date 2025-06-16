@@ -8,5 +8,8 @@ namespace Domain.Enum
 {
     public enum PaymentStatusEnum
     {
+        Pending,
+        complete,
+        refund
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.Contact;
 using Application.DTOs.Customer;
 using System;
@@ -15,8 +15,10 @@ namespace Application.IApplicationServices.Customer
         Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto);
         Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto);
         Task DeleteCustomerAsync(BaseDto<long> dto);
-        Task<ContactsDto> GetCustomerContactAsync();
-        Task<CustomerDto> UpdateCustomerContactsAsync();
-        Task<CustomerDto> DeleteCustomerContactAsync();
+        Task<ContactsDto> GetCustomerContactAsync(BaseDto<long> dto);
+        Task CreateCustomerContactAsync(CreateCustomerContactDto createCustomerContactDto);
+        Task UpdateCustomerContactAsync(UpdateCustomerContactDto dto);
+        Task DeleteCustomerContactAsync(BaseDto<int> customerContatDto);
+
     }
 }

@@ -1,11 +1,9 @@
-﻿
-
-using Application.DTOs.Common;
-using Application.DTOs.Contact;
+﻿using Application.DTOs.Contact;
 using Application.IApplicationServices.Contact;
 using Application.IReositosy;
 using Domain.Enum;
 using Domain.Entities.ApplicationEntities;
+using Application.Common;
 
 namespace Infrastructure.Services.ServicesImplementation
 {

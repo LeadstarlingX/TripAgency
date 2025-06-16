@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Common;
+﻿using Application.Common;
 using Application.DTOs.PaymentMethod;
 using System;
 using System.Collections.Generic;

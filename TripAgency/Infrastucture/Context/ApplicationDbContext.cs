@@ -38,6 +38,7 @@ namespace Domain.Context
         public virtual DbSet<PostTag> PostTags { get; set; }
         public virtual DbSet<PostType> PostTypes { get; set; }
         public virtual DbSet<SEOMetaData> SEOMetaDatas { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }  
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,7 +67,8 @@ namespace Domain.Context
                 .HasColumnName("customer_id");
 
                 b.Property(b => b.Employeeid)
-                .HasColumnName("employee_id");
+                .HasColumnName("employee_id")                
+                .IsRequired(false);
 
                 b.Property(b => b.StartDateTime)
                 .HasColumnName("start_date_time")
@@ -632,8 +634,8 @@ namespace Domain.Context
                 .HasForeignKey(c => c.ContactTypeId);
 
                 c.Property(c => c.Value)
-                .HasColumnName("country")
-                .HasColumnType("nvarchar(10)")
+                .HasColumnName("Value")
+                .HasColumnType("nvarchar(256)")
                 .HasMaxLength(256)
                 .IsRequired();
 

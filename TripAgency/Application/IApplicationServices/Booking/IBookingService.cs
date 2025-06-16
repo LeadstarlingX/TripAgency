@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Common;
+using Application.DTOs.Authentication;
 using Application.DTOs.Booking;
-using Application.DTOs.Common;
 using Application.Filter;
 
 namespace Application.IApplicationServices.Booking
@@ -32,7 +33,11 @@ namespace Application.IApplicationServices.Booking
         /// </summary>
         /// <param name="createCarDto">The create car dto.</param>
         /// <returns></returns>
+<<<<<<< HEAD
         Task<BookingDto> CreateAsync(CreateBookingDto createBookingDto);
+=======
+        Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto, UserProfileDto currentUser);
+>>>>>>> AlaaWork
         /// <summary>
         /// Updates the booking asynchronous.
         /// </summary>
@@ -44,6 +49,12 @@ namespace Application.IApplicationServices.Booking
         /// </summary>
         /// <param name="dto">The dto.</param>
         /// <returns></returns>
+<<<<<<< HEAD
         Task DeleteByIdAsync(BaseDto<int> dto);
+=======
+        Task DeleteBookingByIdAsync(BaseDto<int> dto);
+        Task<BookingDto> ConfirmBookingAsync(int bookingId, long employeeId);
+
+>>>>>>> AlaaWork
     }
 }

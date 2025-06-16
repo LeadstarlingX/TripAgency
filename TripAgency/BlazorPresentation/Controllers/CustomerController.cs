@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.DTOs.Customer;
 using Application.IApplicationServices.Customer;
-using Application.DTOs.Common;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Common;
 

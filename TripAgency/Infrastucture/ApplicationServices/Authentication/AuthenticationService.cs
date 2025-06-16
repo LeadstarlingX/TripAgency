@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Authentication;
+using Application.DTOs.Customer;
 using Application.IApplicationServices.Authentication;
 using Application.IApplicationServices.Customer;
 using Application.IReositosy;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +31,7 @@ namespace Infrastructure.ApplicationServices.Authentication
         private readonly IIdentityAppRepository<ApplicationUser> _userRepository;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //private readonly ICustomerService _customerService;
+        private readonly ICustomerService _customerService;
 
 
         public AuthenticationService(
@@ -37,12 +39,12 @@ namespace Infrastructure.ApplicationServices.Authentication
             SignInManager<ApplicationUser> signInManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration config,
-            IIdentityAppRepository<ApplicationUser> identityAppRepository
-            //ICustomerService customerService
+            IIdentityAppRepository<ApplicationUser> identityAppRepository,
+            ICustomerService customerService
             )
         {
             _userManager = userManager;
-            //_customerService = customerService;
+            _customerService = customerService;
             _signInManager = signInManager;
             _config = config;
             _userRepository = identityAppRepository;
@@ -86,7 +88,28 @@ namespace Infrastructure.ApplicationServices.Authentication
             };
         }
         
+        public async Task<bool> IsAdmin()
+        {
+            if (_httpContextAccessor.HttpContext is null)
+                return false;
 
+            var authenticateResult = await _httpContextAccessor.HttpContext.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            if (!authenticateResult.Succeeded)
+                return false;
+
+            ApplicationUser? customer = null;
+            var identifierClaim = authenticateResult.Principal.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier);
+
+            if (identifierClaim != null && int.TryParse(identifierClaim.Value, out int customerId))
+            {
+                customer = await _userManager.FindByIdAsync(customerId.ToString());
+                if(customer is null)
+                    return false;
+            }
+            var isAdmin = await _userManager.IsInRoleAsync(customer!, DefaultSetting.AdminRoleName);
+
+            return isAdmin;
+        }
         public async Task<UserProfileDto> LoginAsync(LoginDto loginDto)
         {
             var existingUser = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -117,23 +140,41 @@ namespace Infrastructure.ApplicationServices.Authentication
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterDto dto, bool fromAdmin = false)
+        public async Task<long> RegisterAsync(RegisterDto dto,bool fromAdmin = false)
         {
-            ApplicationUser user = new ApplicationUser
-                {
-                    UserName = dto.FirstName+dto.LastName,
-                    Email = dto.Email,
-                    Name = $"{dto.FirstName} {dto.LastName}",
-                    Address = dto.Address
-                };
+            var user = new ApplicationUser
+            {
+                UserName = dto.FirstName + dto.LastName,
+                Email = dto.Email,
+                Name = $"{dto.FirstName} {dto.LastName}",
+                Address = dto.Address
+            };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
+            
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user,(dto.Role).ToString());
-            }
+                await _userManager.AddToRoleAsync(user, dto.Role.ToString());
+                var isAdmin = await IsAdmin();
+                if(!isAdmin)
+                {
+                    var customer = new CreateCustomerDto()
+                    {
+                        Id = user.Id,
+                        FirstName = dto.FirstName,
+                        LastName = dto.LastName,
+                        Country = dto.Address,
+                        UserDto = dto
 
-            return result;
+                    }; 
+
+                    var customerResult = await _customerService.CreateCustomerAsync(customer);
+
+                }
+                return user.Id;
+            }
+            var errorMessages = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"User creation failed: {errorMessages}");
         }
 
         private async Task<TokenDto> GenerateJwtToken(ApplicationUser user)

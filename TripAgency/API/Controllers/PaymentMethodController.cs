@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Actions;
+﻿using Application.Common;
+using Application.DTOs.Actions;
 using Application.DTOs.Car;
-using Application.DTOs.Common;
 using Application.DTOs.PaymentMethod;
 using Application.IApplicationServices;
 using Application.Serializer;
@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPaymentMethodById(BaseDto<int> dto)
         {
             var paymentmetod = await _paymentMethodService.GetPaymentMethodByIdAsync(dto);
-            if(paymentmetod == null)
+            if(paymentmetod is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -62,7 +62,7 @@ namespace API.Controllers
         {
             var result = await _paymentMethodService.CreatePaymentMethodAsync(dto);
 
-            if (result == null)
+            if (result is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -83,7 +83,7 @@ namespace API.Controllers
         public async Task<IActionResult> DeletePaymentMethod(BaseDto<int> dto)
         {
             var result = await _paymentMethodService.DeletePaymentMethodAsync(dto);
-            if (result == null)
+            if (result is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -93,7 +93,7 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car deleted successfully", StatusCodes.Status200OK),
+                    new ApiResponse(true, "deleted successfully", StatusCodes.Status200OK),
                     string.Empty));
         }
 
@@ -103,7 +103,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdatePaymentMethod(UpdatePaymentMethodDto dto)
         {
             var result = await _paymentMethodService.UpdatePaymentMethod(dto);
-            if (result == null)
+            if (result is null)
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
@@ -113,16 +113,8 @@ namespace API.Controllers
 
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car updated successfully", StatusCodes.Status200OK, result),
+                    new ApiResponse(true, " updated successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
-
-
-
-
-
-
-
-
     }
 }

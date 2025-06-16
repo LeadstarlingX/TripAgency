@@ -1,5 +1,6 @@
 ﻿using Application.Mapping.CarProfile;
 using Application.Mapping.CategoryProfile;
+using Application.Mapping.PaymentProfile;
 using Application.Mapping.PaymentTransactionProfile;
 using Application.Mapping.PymentMethodProfile;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace Application
             services.AddAutoMapper(typeof(CategoryProfile).Assembly);
             services.AddAutoMapper(typeof(PaymentMethodProfile).Assembly);
             services.AddAutoMapper(typeof(PaymentTransactionProfile).Assembly);
+            services.AddAutoMapper(typeof(PaymentProfile).Assembly);
 
 
             return services;

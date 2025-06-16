@@ -1,8 +1,8 @@
-﻿using Application.DTOs.Common;
-using Application.DTOs.Contact;
+﻿using Application.DTOs.Contact;
 using Domain.Enum;
 using Domain.Entities;
 using Domain.Entities.ApplicationEntities;
+using Application.Common;
 
 namespace Application.IApplicationServices.Contact
 {

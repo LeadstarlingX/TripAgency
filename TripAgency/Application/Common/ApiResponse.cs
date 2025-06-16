@@ -3,9 +3,9 @@ using Application.Serializer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Application.DTOs.Common
+namespace Application.Common
 {
-	public class ApiResponse(bool Result, string Message, int Code, object? Data = null) : ISerializableObject
+    public class ApiResponse(bool Result, string Message, int Code, object? Data = null) : ISerializableObject
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Code { get; set; } = Code;
@@ -25,7 +25,7 @@ namespace Application.DTOs.Common
         }
     }
 
-    public class ApiResponse<T> :  ActionResult
+    public class ApiResponse<T> : ActionResult
     {
         public int Code { get; set; }
         public required string Message { get; set; }

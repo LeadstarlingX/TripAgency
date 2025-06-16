@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Common;
-using Domain.Enum;
+﻿using Domain.Enum;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Application.Common;
 
 namespace Application.DTOs.Contact
 {

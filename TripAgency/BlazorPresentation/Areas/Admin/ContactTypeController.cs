@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.IApplicationServices.Contact;
 using Application.DTOs.Contact;
-using Application.DTOs.Common;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Common;
+using Application.Common;
 
 namespace BlazorPresentation.Areas.Admin
 {
