@@ -43,7 +43,7 @@ namespace Infrastructure.ApplicationServices.Customer
 
         public async Task<CustomersDto> GetCustomersAsync()
         {
-            var customers = await _customerRepository.GetAllAsync(c => c.Contacts);
+            var customers = await _customerRepository.GetAllAsync(false, c => c.Contacts);
             return new CustomersDto
             {
                 Customers = customers.Select(c => _mapper.Map<CustomerDto>(c)).ToList()
@@ -128,7 +128,7 @@ namespace Infrastructure.ApplicationServices.Customer
         {
             var customer = (await _customerRepository.FindAsync(c => c.UserId == dto.Id)).FirstOrDefault() ??
                 throw new KeyNotFoundException("Customer not found");
-            var customerContacts = (await _customerContactRepository.FindAsync(c => c.CustomerId == dto.Id, c => c.ContactType!)) ?? [];
+            var customerContacts = (await _customerContactRepository.FindAsync(c => c.CustomerId == dto.Id, false, c => c.ContactType!)) ?? [];
 
             return new ContactsDto
             {

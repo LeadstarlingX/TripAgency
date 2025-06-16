@@ -76,7 +76,7 @@ namespace Infrastructure.ApplicationServices
         }
         public async Task<IEnumerable<CarDto>> GetCarsByCategory(string category)
         {
-            var result = await _carRepositry.FindAsync(x => x.Category!.Title == category, x=> x.Category!);
+            var result = await _carRepositry.FindAsync(x => x.Category!.Title == category,false, x=> x.Category!);
 
             if (result==null)
             {

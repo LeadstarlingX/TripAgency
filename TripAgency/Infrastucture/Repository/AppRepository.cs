@@ -37,7 +37,8 @@ namespace Infrastructure.Repository
         /// <param name="predicate">The predicate.</param>
         /// <param name="navigationProperties">The navigation properties.</param>
         /// <returns></returns>
-        public IQueryable<T> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties)
+        public IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool asNoTracking = false , params Expression<Func<T, object>>[] navigationProperties)
+            
         {
             IQueryable<T> query = _entities;
             if (navigationProperties is not null)
@@ -53,7 +54,7 @@ namespace Infrastructure.Repository
         /// <param name="predicate">The predicate.</param>
         /// <param name="navigationProperties">The navigation properties.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties)
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = false, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _entities;
             if (navigationProperties is not null && !navigationProperties.Any())
@@ -68,7 +69,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> FindWithAllIncludeAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FindWithAllIncludeAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = false)
         {
             IQueryable<T> query = _entities.IncludeAll(_context);
             return await query.Where(predicate).ToListAsync();
@@ -80,7 +81,7 @@ namespace Infrastructure.Repository
         /// <param name="predicate">The predicate.</param>
         /// <param name="includeExpression">The include expression.</param>
         /// <returns></returns>
-        public IQueryable<T> FindWithComplexIncludes(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> includeExpression)
+        public IQueryable<T> FindWithComplexIncludes(Expression<Func<T, bool>> predicate,  Func<IQueryable<T>, IQueryable<T>> includeExpression, bool asNoTracking = false)
         {
             IQueryable<T> query = includeExpression(_entities);
             return query.Where(predicate);
@@ -94,7 +95,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="navigationProperties">The navigation properties.</param>
         /// <returns></returns>
-        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
+        public IQueryable<T> GetAll(bool asNoTracking = false, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _entities;
             if (navigationProperties is not null)
@@ -109,7 +110,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="navigationProperties">The navigation properties.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] navigationProperties)
+        public async Task<IEnumerable<T>> GetAllAsync(bool asNoTracking = false, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _entities;
             if (navigationProperties is not null)
@@ -123,7 +124,7 @@ namespace Infrastructure.Repository
         /// Gets all with all include.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> GetAllWithAllInclude()
+        public IQueryable<T> GetAllWithAllInclude(bool asNoTracking = false)
         {
             return _entities.IncludeAll(_context);
         }
@@ -132,7 +133,7 @@ namespace Infrastructure.Repository
         /// Gets all with all include asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAllWithAllIncludeAsync()
+        public async Task<IEnumerable<T>> GetAllWithAllIncludeAsync(bool asNoTracking = false)
         {
             IQueryable<T> query = _entities.IncludeAll(_context);
             return await query.ToListAsync();
@@ -145,7 +146,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        public async Task<T> UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity, bool asNoTracking = false)
         {
             _entities.Update(entity);
             await _context.SaveChangesAsync();
@@ -157,7 +158,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        public async Task<T> RemoveAsync(T entity)
+        public async Task<T> RemoveAsync(T entity, bool asNoTracking = false)
         {
             _entities.Remove(entity);
             await _context.SaveChangesAsync();
@@ -169,7 +170,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        public async Task<T> InsertAsync(T entity)
+        public async Task<T> InsertAsync(T entity, bool asNoTracking = false)
         {
             var newEntity = await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
