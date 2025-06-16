@@ -7,6 +7,7 @@ using Application.IApplicationServices.Payment;
 using Application.IReositosy;
 using AutoMapper;
 using Domain.Entities.ApplicationEntities;
+using Domain.Enum;
 using Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
@@ -54,13 +55,13 @@ namespace Infrastructure.ApplicationServices
             DateTime start = booking.StartDateTime;
             DateTime end = booking.EndDateTime;
          
-            if(booking.BookingType== "TripBooking")
+            if(booking.BookingType== BookingTypes.TripBooking)
             {
 
                 p.AmountDue = 1000m;
                 p.AmountPaid = 0m;
             }
-            else if(booking.BookingType== "CarBooking")
+            else if(booking.BookingType== BookingTypes.CarBooking)
             {
                 p.AmountPaid = 0m;
                 var total = (end - start).Hours;

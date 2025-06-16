@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.DTOs;
 using Application.DTOs.Posts;
+using Application.Filter;
 using Application.IApplicationServices;
 using Application.IApplicationServices.Post;
 using Application.IReositosy;
@@ -61,6 +62,36 @@ namespace Infrastructure.ApplicationServices
        public async Task<IEnumerable<PostDto>> GetPostsAsync()
         {
             return _mapper.Map<IEnumerable<PostDto>>(await _repo.GetAllAsync());
+        }
+
+       public async  Task <PostDto> FilterPostAsync(PostFilter postFilter)
+        {
+            var query = await _repo.GetAllAsync();
+
+            if(postFilter.Slug != null)
+            {
+                query = query.Where(x => x.Slug == postFilter.Slug);
+
+            }
+            if(postFilter.Title != null)
+            {
+                query =query.Where(x=>x.Title == postFilter.Title);
+
+            }
+            if(postFilter.Body != null)
+            {
+                query=query.Where(x=>x.Body == postFilter.Body);
+            }
+            if(postFilter.Summary != null)
+            {
+                query =query.Where(x=>x.Summary == postFilter.Summary);
+            }
+            if(postFilter.Views != null)
+            {
+                query =query.Where(x=>x.Views == postFilter.Views);
+            }
+            return _mapper.Map<PostDto>(query.FirstOrDefault());
+
         }
     }
 }

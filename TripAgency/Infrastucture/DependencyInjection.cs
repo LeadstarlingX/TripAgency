@@ -31,7 +31,7 @@ using Application.IApplicationServices.CarBooking;
 using Infrastructure.ApplicationServices.CarBooking;
 using Infrastructure.ApplicationServices.SeoMetaData;
 using Application.IApplicationServices.TagService;
-using Application.IApplicationServices.SeoMetaData;
+using Application.IApplicationServices;
 using Application.IApplicationServices.PostType;
 using Application.IApplicationServices.Post;
 

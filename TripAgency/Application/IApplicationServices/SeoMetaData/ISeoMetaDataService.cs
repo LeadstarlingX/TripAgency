@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace Application.IApplicationServices.SeoMetaData
+namespace Application.IApplicationServices
 {
     public interface ISeoMetaDataService
     {
@@ -18,5 +19,6 @@ namespace Application.IApplicationServices.SeoMetaData
         Task<SeoMetaDataDto> UpdateSeoMetaDtaAsync(UpdateSeoMetaDtaDto  updateSeoMetaDtaDto);
         Task<SeoMetaDataDto> DeleteSeoMetaDataAsync(BaseDto<int> dto);
         Task<SeoMetaDataDto> GetSeoMetaDataByIdAsync(BaseDto<int> id);
-    }
+        Task<IEnumerable<SeoMetaDataDto>> GetSeoMetaDataByPostID( int postId);
+            }
 }

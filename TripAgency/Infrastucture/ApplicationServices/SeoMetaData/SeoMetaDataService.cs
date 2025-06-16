@@ -3,7 +3,7 @@ using Application.DTOs;
 using Application.DTOs.SeoMetaData;
 using Application.DTOs.SeoMetaDataDto;
 using Application.IApplicationServices;
-using Application.IApplicationServices.SeoMetaData;
+using Application.IApplicationServices;
 using Application.IReositosy;
 using AutoMapper;
 using Domain.Entities.ApplicationEntities;
@@ -62,6 +62,14 @@ namespace Infrastructure.ApplicationServices.SeoMetaData
 
             await _repo.UpdateAsync(s);
             return _mapper.Map<SeoMetaDataDto>(s);
+        }
+
+             public async Task<IEnumerable<SeoMetaDataDto>> GetSeoMetaDataByPostID(int postId)
+        {
+            var Seo = await _repo.FindAsync(x => x.Post!.Id==postId, x => x.Post!);
+
+            return _mapper.Map<IEnumerable<SeoMetaDataDto>>(Seo);
+
         }
     }
 }

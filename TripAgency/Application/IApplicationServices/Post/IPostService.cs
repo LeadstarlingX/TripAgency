@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Common;
+using Application.Filter;
 
 namespace Application.IApplicationServices.Post
 {
@@ -17,5 +18,7 @@ namespace Application.IApplicationServices.Post
         Task<PostDto> UpdatePostAsync(UpdatePostDto updatePostDto);
         Task<PostDto> DeletePostAsync(BaseDto<int> dto);
         Task<PostDto> GetPostByIdAsync(BaseDto<int> id);
+
+        Task<PostDto> FilterPostAsync(PostFilter postFilter);
     }
 }

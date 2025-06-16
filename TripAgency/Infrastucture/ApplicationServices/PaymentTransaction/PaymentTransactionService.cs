@@ -65,7 +65,7 @@ namespace Infrastructure.ApplicationServices
             }
             if(p.Status== Domain.Enum.PaymentStatusEnum.complete)
             {
-                p.PaymentDate = DateTime.Now;
+                p.PaymentDate= DateTime.Now;
             }
 
             await _service.UpdatePayment(p);

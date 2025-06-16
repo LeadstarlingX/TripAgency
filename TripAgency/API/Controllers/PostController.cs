@@ -8,6 +8,7 @@ using Application.Serializer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.Serialization;
+using Application.Filter;
 
 namespace API.Controllers
 {
@@ -43,6 +44,16 @@ namespace API.Controllers
             var p = await _postService.GetPostByIdAsync(dto);
 
             return new RawJsonActionResult(jsonFieldsSerializer.Serialize(new ApiResponse(true , "" , StatusCodes.Status200OK, p),string.Empty));
+
+        }
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<PostDto>), StatusCodes.Status200OK)]
+
+        public async Task<IActionResult> FilterPost(PostFilter postFilter)
+        {
+            var p = await _postService.FilterPostAsync(postFilter);
+
+            return new RawJsonActionResult(jsonFieldsSerializer.Serialize(new ApiResponse(true, "", StatusCodes.Status200OK, p), string.Empty));
 
         }
 

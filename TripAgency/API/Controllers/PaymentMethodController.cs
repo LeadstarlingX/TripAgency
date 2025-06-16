@@ -45,7 +45,7 @@ namespace API.Controllers
             {
                 return new RawJsonActionResult(
                     _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(false, "Car not found", StatusCodes.Status404NotFound),
+                        new ApiResponse(false, "Payment Method not found", StatusCodes.Status404NotFound),
                         string.Empty));
             }
             return new RawJsonActionResult(
