@@ -15,11 +15,11 @@ namespace Application.DTOs.Posts
         public string? Image { get; set; }
         public string? Body { get; set; }
         public string? Slug { get; set; }
-        public long Views { get; set; }
-        public PostStatusEnum Status { get; set; }
-        public DateTime PublishDate { get; set; }
+        public long? Views { get; set; }
+        public PostStatusEnum? Status { get; set; }
+        public DateTime? PublishDate { get; set; }
         public string? Summary { get; set; }
-        public long AuthorId { get; set; }
-        public int PostTypeId { get; set; }
+        public long? AuthorId { get; set; }
+        public int? PostTypeId { get; set; }
     }
 }

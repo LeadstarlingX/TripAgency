@@ -8,7 +8,7 @@ namespace Application.DTOs.PostTag
 {
     public class UpdatePostTag
     {   
-        public int TagId { get; set; }
-        public int PostId { get; set; }
+        public int? TagId { get; set; }
+        public int? PostId { get; set; }
     }
 }

@@ -16,6 +16,6 @@ namespace Application.DTOs.SeoMetaData
         public string? Description { get; set; }
         public string? KeyWords { get; set; }
         public string? UrlSlug { get; set; }
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
     }
 }
