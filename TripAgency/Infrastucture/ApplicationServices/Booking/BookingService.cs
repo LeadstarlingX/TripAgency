@@ -29,25 +29,23 @@ public class BookingService : IBookingService
     {
         var bookingEntity = _mapper.Map<Booking>(createBookingDto);
         bookingEntity.Status = BookingStatusEnum.Pending;
-
-        var newBooking = await _bookingRepository.InsertAsync(bookingEntity);
-
         if (currentUser.Token != null &&
             !currentUser.Token.UserRoles.Any(r => r.Equals(DefaultSetting.CustomerRoleName, StringComparison.OrdinalIgnoreCase)))
         {
-            if (currentUser.Token.UserRoles.Contains(DefaultSetting.AdminRoleName) ||  currentUser.Token.UserRoles.Contains(DefaultSetting.EmployeeRoleName))
+            if (currentUser.Token.UserRoles.Contains(DefaultSetting.AdminRoleName) || currentUser.Token.UserRoles.Contains(DefaultSetting.EmployeeRoleName))
             {
                 var employee = (await _employeeRepository.FindAsync(e => e.UserId == currentUser.Id)).FirstOrDefault();
 
                 if (employee != null)
                 {
-                    newBooking.Employeeid = employee.UserId;
-                    newBooking.Status = BookingStatusEnum.InProgress;
-
-                    await _bookingRepository.UpdateAsync(newBooking);
+                    bookingEntity.Employeeid = employee.UserId;
+                    bookingEntity.Status = BookingStatusEnum.InProgress;
                 }
             }
         }
+        var newBooking = await _bookingRepository.InsertAsync(bookingEntity);
+
+        
 
         return await GetBookingByIdAsync(new BaseDto<int> { Id = (int)newBooking.Id });
     }

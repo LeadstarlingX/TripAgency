@@ -72,14 +72,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateCar(UpdateCarDto dto)
         {
             var result = await _carService.UpdateCarAsync(dto);
-            if (result ==null)
-            {
-                return new RawJsonActionResult(
-                    _jsonFieldsSerializer.Serialize(
-                        new ApiResponse(false, "failed update", StatusCodes.Status400BadRequest),
-                        string.Empty));
-            }
-
+           
             return new RawJsonActionResult(
                 _jsonFieldsSerializer.Serialize(
                     new ApiResponse(true, "Car updated successfully", StatusCodes.Status200OK, result),

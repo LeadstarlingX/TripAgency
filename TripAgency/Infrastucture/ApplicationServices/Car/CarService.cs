@@ -50,13 +50,12 @@ namespace Infrastructure.ApplicationServices
             return _mapper.Map<IEnumerable<CarDto>>(car);
         }
 
-        public async Task<CarDto> GetCarByIdAsync(BaseDto<int> dto)
+        public async Task<CarDto> GetCarByIdAsync(BaseDto<int> dto, bool asNoTracking = false)
         {
-            var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id, true)).FirstOrDefault();
+            var car = (await _carRepositry.FindAsync(x => x.Id == dto.Id, asNoTracking)).FirstOrDefault();
             if (car == null)
             {
                 throw new KeyNotFoundException("Car Not Found");
-
             }
 
             return _mapper.Map<CarDto>(car);
@@ -69,10 +68,15 @@ namespace Infrastructure.ApplicationServices
             return _mapper.Map<IEnumerable<CarDto>>(c);
         }
 
-        public async Task<CarDto> UpdateCarAsync(UpdateCarDto updatecarDto, bool asNoTracking = false)
+        public async Task<CarDto> UpdateCarAsync(UpdateCarDto updatecarDto)
         {
-            var c = await _carRepositry.UpdateAsync(_mapper.Map<Car>(updatecarDto), asNoTracking);
-            return _mapper.Map<CarDto>(c);
+            var existingCar = (await _carRepositry.FindAsync(c => c.Id == updatecarDto.Id)).FirstOrDefault();
+            if (existingCar == null)
+                throw new KeyNotFoundException($"Car with ID {updatecarDto.Id} not found.");
+
+            _mapper.Map(updatecarDto, existingCar); // Only non-null properties are updated
+            await _carRepositry.UpdateAsync(existingCar);
+            return _mapper.Map<CarDto>(existingCar);
         }
         public async Task<IEnumerable<CarDto>> GetCarsByCategory(string category)
         {

@@ -163,6 +163,28 @@ namespace Infrastructure.Seeds
                 shouldUpdateContext = true;
             }
 
+            if (!_context.Categories.Any())
+            {
+                var categories = new List<Category>
+                {
+                    new Category
+                    {
+                       Title = "VIP"
+                    },
+                    new Category
+                    {
+                        Title = "Eco"
+                    },
+                    new Category
+                    {
+                        Title = "Family"
+                    }
+                };
+
+                _context.Categories.AddRange(categories);
+                shouldUpdateContext = true;
+            }
+
             if (shouldUpdateContext)
             {
                 shouldUpdateContext = false;

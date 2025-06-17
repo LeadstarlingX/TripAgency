@@ -4,6 +4,7 @@ using Domain.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250616174405_RemoveSoftDelete")]
+    partial class RemoveSoftDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace Domain.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 6, 16, 21, 53, 27, 72, DateTimeKind.Local).AddTicks(9328))
+                        .HasDefaultValue(new DateTime(2025, 6, 16, 20, 44, 5, 147, DateTimeKind.Local).AddTicks(8903))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
@@ -86,7 +89,7 @@ namespace Domain.Migrations
                     b.Property<string>("CarStatus")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(10)")
                         .HasDefaultValue("Available")
                         .HasColumnName("status");
 
@@ -101,7 +104,7 @@ namespace Domain.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("image");
 
                     b.Property<decimal>("Mbw")
@@ -110,7 +113,7 @@ namespace Domain.Migrations
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("model");
 
                     b.Property<decimal>("Ppd")
@@ -485,7 +488,7 @@ namespace Domain.Migrations
                     b.Property<DateTime>("PublishDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 6, 16, 21, 53, 27, 83, DateTimeKind.Local).AddTicks(5904))
+                        .HasDefaultValue(new DateTime(2025, 6, 16, 20, 44, 5, 153, DateTimeKind.Local).AddTicks(4454))
                         .HasColumnName("publish_date");
 
                     b.Property<string>("Slug")

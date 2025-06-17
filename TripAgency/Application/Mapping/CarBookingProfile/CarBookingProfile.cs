@@ -34,6 +34,13 @@ namespace Application.Mapping.CarBookingProfile
                .ForMember(dest => dest.PickupLocation, opt => opt.MapFrom(src => src.PickupLocation))
                .ForMember(dest => dest.DropoffLocation, opt => opt.MapFrom(src => src.DropoffLocation))
                .ForMember(dest => dest.WithDriver, opt => opt.MapFrom(src => src.WithDriver));
+
+            CreateMap<UpdateCarBookingDto, CarBooking>()
+            .ForMember(dest => dest.BookingId, opt => opt.Ignore())
+            .ForMember(dest => dest.CarId, opt => opt.Ignore())
+            .ForMember(dest => dest.PickupLocation, opt => opt.Condition(src => src.PickupLocation != null))
+            .ForMember(dest => dest.DropoffLocation, opt => opt.Condition(src => src.DropoffLocation != null))
+            .ForMember(dest => dest.WithDriver, opt => opt.Condition(src => src.WithDriver.HasValue));
         }
     }
 }

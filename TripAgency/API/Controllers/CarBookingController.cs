@@ -36,12 +36,8 @@ namespace API.Controllers
         public async Task<IActionResult> CreateCarBooking([FromBody] CreateCarBookingDto dto)
         {
             var car = (await _carService.GetCarByIdAsync(new BaseDto<int> { Id = dto.CarId }));
-            if (car == null)
-                throw new KeyNotFoundException($"Car with ID {dto.CarId} not found.");
             if (car.CarStatus == CarStatusEnum.NotAvailable)
-                return new RawJsonActionResult(
-                 _jsonFieldsSerializer.Serialize(
-                     new ApiResponse(false, $"Car with ID {dto.CarId} not available.", StatusCodes.Status400BadRequest), string.Empty));
+                return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(false, $"Car with ID {dto.CarId} not available.", StatusCodes.Status400BadRequest), string.Empty));
             var bookingDto = new CreateBookingDto
             {
                 CustomerId = dto.CustomerId,
@@ -69,12 +65,9 @@ namespace API.Controllers
                     Id = car.Id,
                     CarStatus = CarStatusEnum.NotAvailable
                 };
-                await _carService.UpdateCarAsync(updateCar, true);
+                await _carService.UpdateCarAsync(updateCar);
             }
-            return new RawJsonActionResult(
-                _jsonFieldsSerializer.Serialize(
-                    new ApiResponse(true, "Car booking created successfully", StatusCodes.Status200OK, result),
-                    string.Empty));
+            return new RawJsonActionResult(_jsonFieldsSerializer.Serialize(new ApiResponse(true, "Car booking created successfully", StatusCodes.Status200OK, result), string.Empty));
         }
         #endregion
 

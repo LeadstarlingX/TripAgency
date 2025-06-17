@@ -8,8 +8,8 @@ namespace Domain.Enum
 {
     public enum CarStatusEnum
     {
-        Available,
-        Broken,
-        NotAvailable
+        Available = 0,
+        Broken = 1,
+        NotAvailable = 2
     }
 }

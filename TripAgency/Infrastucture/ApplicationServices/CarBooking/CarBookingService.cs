@@ -77,9 +77,16 @@ namespace Infrastructure.ApplicationServices.CarBooking
             return _mapper.Map<IEnumerable<CarBookingDto>>(carBookings);
         }
 
-        public Task<CarBookingDto> UpdateCarBookingAsync(UpdateCarBookingDto dto)
+        public async Task<CarBookingDto> UpdateCarBookingAsync(UpdateCarBookingDto dto)
         {
-            throw new NotImplementedException();
+            var existingCarBooking = (await _carBookingRepository.FindAsync(cb => cb.BookingId == dto.Id)).FirstOrDefault();
+            if (existingCarBooking == null)
+                throw new KeyNotFoundException($"CarBooking with ID {dto.Id} not found.");
+
+            _mapper.Map(dto, existingCarBooking); 
+            await _carBookingRepository.UpdateAsync(existingCarBooking);
+
+            return _mapper.Map<CarBookingDto>(existingCarBooking);
         }
     }
 }

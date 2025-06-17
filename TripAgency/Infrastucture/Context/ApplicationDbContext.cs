@@ -292,7 +292,7 @@ namespace Domain.Context
 
                 c.Property(c => c.Model)
                 .HasColumnName("model")
-                .HasColumnType("nvarchar(10)")
+                .HasColumnType("nvarchar(max)")
                 .IsRequired();
 
                 c.Property(c => c.Color)
@@ -317,7 +317,7 @@ namespace Domain.Context
 
                 c.Property(c => c.Image)
                 .HasColumnName("image")
-                .HasColumnType("nvarchar(10)")
+                .HasColumnType("nvarchar(max)")
                 .IsRequired();
 
                 c.Property(c => c.CategoryId)
@@ -328,7 +328,7 @@ namespace Domain.Context
 
                 c.Property(c => c.CarStatus)
                 .HasConversion<string>()
-                .HasColumnType("nvarchar(10)")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("status")
                 .HasDefaultValue(CarStatusEnum.Available)
                 .IsRequired();

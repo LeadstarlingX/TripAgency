@@ -11,8 +11,6 @@ namespace Application.DTOs.CarBooking
 {
     public class UpdateCarBookingDto : BaseDto<int>
     {
-        public int? CarId { get; set; }
-
         public string? PickupLocation { get; set; }
 
         public string? DropoffLocation { get; set; }
