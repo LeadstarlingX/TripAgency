@@ -66,7 +66,7 @@ namespace Infrastructure.ApplicationServices.SeoMetaData
 
              public async Task<IEnumerable<SeoMetaDataDto>> GetSeoMetaDataByPostID(int postId)
         {
-            var Seo = await _repo.FindAsync(x => x.Post!.Id==postId, x => x.Post!);
+            var Seo = await _repo.FindAsync(x => x.Post!.Id==postId, false, x => x.Post!);
 
             return _mapper.Map<IEnumerable<SeoMetaDataDto>>(Seo);
 
