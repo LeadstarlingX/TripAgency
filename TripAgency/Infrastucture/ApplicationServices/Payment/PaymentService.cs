@@ -38,54 +38,29 @@ namespace Infrastructure.ApplicationServices
         public async Task<PaymentDto> CreatePaymentAsync(CreatePaymentDto createPaymentDto)
         {
             var p = _mapper.Map<Payment>(createPaymentDto);
-           
-             BaseDto<int> dto = new BaseDto<int>()
-            {
-                Id = createPaymentDto.BookingId,
-            };
-            var booking = await _bookingService.GetBookingByIdAsync(dto);
-            var carbooking = await _carBookingService.GetCarBookingByIdAsync(dto);
-            BaseDto<int> carDto = new BaseDto<int>()
-            {
-                Id = carbooking.CarId,
-            };
 
-
-             var car = await _carService.GetCarByIdAsync(carDto);
+            var booking = await _bookingService.GetBookingByIdAsync(new BaseDto<int> { Id = createPaymentDto.BookingId});  
             DateTime start = booking.StartDateTime;
-            DateTime end = booking.EndDateTime;
-         
+            DateTime end = booking.EndDateTime;         
             if(booking.BookingType== BookingTypes.TripBooking)
             {
-
                 p.AmountDue = 1000m;
                 p.AmountPaid = 0m;
             }
             else if(booking.BookingType== BookingTypes.CarBooking)
             {
+                var carBooking = await _carBookingService.GetCarBookingByIdAsync(new BaseDto<int> { Id = createPaymentDto.BookingId });
                 p.AmountPaid = 0m;
-                var total = (end - start).Hours;
-                if ( total>24)
-                {
-                    p.AmountDue = (decimal)total* car.Ppd;
-
-                }
-                else
-                {
-                    p.AmountDue = (decimal)total * car.Pph;
-                }
+                p.AmountDue = 0; 
+                var total = (end - start);
+                if ( total.Days > 0)
+                    p.AmountDue += (decimal)((total.Days) * carBooking.Car!.Ppd);
                 
-               
-
+                if(total.Hours > 0)
+                    p.AmountDue += (decimal)total.Hours * carBooking.Car!.Pph;
             }
-
-
-
             await _Repo.InsertAsync(p);
             return _mapper.Map<PaymentDto>(p);
-
-
-
         }
 
         public async Task<PaymentDto> DeletePaymentAsync(BaseDto<int> dto)
@@ -97,9 +72,9 @@ namespace Infrastructure.ApplicationServices
             return _mapper.Map<PaymentDto>(p);
         }
 
-        public async Task<PaymentDto> GetPaymentByIdAsync(BaseDto<int> dto)
+        public async Task<PaymentDto> GetPaymentByIdAsync(BaseDto<int> dto, bool asNoTraking = false)
         {
-            var p = (await _Repo.FindAsync(x => x.Id == dto.Id)).FirstOrDefault();
+            var p = (await _Repo.FindAsync(x => x.Id == dto.Id, asNoTraking)).FirstOrDefault();
 
             return _mapper.Map<PaymentDto>(p);
         }

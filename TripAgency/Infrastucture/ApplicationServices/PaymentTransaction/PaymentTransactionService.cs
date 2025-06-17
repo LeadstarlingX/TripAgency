@@ -35,41 +35,35 @@ namespace Infrastructure.ApplicationServices
            var t = _mapper.Map<PaymentTransaction>(createPaymentTranDto);
             await _paymenttransaction.InsertAsync(t);
             BaseDto<int> b = new BaseDto<int> { Id = createPaymentTranDto.PaymentId };
-            PaymentDto paymentDto = await _service.GetPaymentByIdAsync(b);
+            PaymentDto paymentDto = await _service.GetPaymentByIdAsync(b, true);
 
-            UpdatePaymentDto p;
-
-            p = new UpdatePaymentDto
+            UpdatePaymentDto payment = new UpdatePaymentDto()
             {
-                Id = createPaymentTranDto.PaymentId,
-              
+                Id = createPaymentTranDto.PaymentId,              
             };
 
-           // p.Id = createPaymentTranDto.PaymentId;
-            p.BookingId = paymentDto.BookingId;
-           
-            p.Notes =   $"transaction{createPaymentTranDto.PaymentId}";
-            p.AmountDue -= createPaymentTranDto.Amount;
-            p.AmountPaid += createPaymentTranDto.Amount;
+
+
+            // p.Id = createPaymentTranDto.PaymentId;
+            payment.BookingId = paymentDto.BookingId;
+
+            payment.Notes =   $"transaction{createPaymentTranDto.PaymentId}";
+            payment.AmountPaid += createPaymentTranDto.Amount;
             if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Deposit)
             {
-                p.Status = Domain.Enum.PaymentStatusEnum.Pending;
+                payment.Status = Domain.Enum.PaymentStatusEnum.Pending;
             }
-            else if (p.Status == Domain.Enum.PaymentStatusEnum.complete)
+            else if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Final)
             {
-                p.Status = Domain.Enum.PaymentStatusEnum.complete;
+                payment.Status = Domain.Enum.PaymentStatusEnum.complete;
             }
-            else
+            if(payment.Status== Domain.Enum.PaymentStatusEnum.complete)
             {
-                p.Status = Domain.Enum.PaymentStatusEnum.refund;
-            }
-            if(p.Status== Domain.Enum.PaymentStatusEnum.complete)
-            {
-                p.PaymentDate= DateTime.Now;
+                payment.PaymentDate= DateTime.Now;
             }
 
-            await _service.UpdatePayment(p);
-            return _mapper.Map<PaymentTransactionDto>(t);
+            await _service.UpdatePayment(payment);
+            return _mapper.Map<PaymentTransactionDto>(payment);
         }
 
         public async Task<PaymentTransactionDto> DeletePaymentTransactionAsync(BaseDto<int> dto)
