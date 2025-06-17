@@ -194,6 +194,8 @@ namespace Infrastructure.Seeds
                 };
 
                 _context.Categories.AddRange(categories);
+                _context.SaveChanges();
+
                 shouldUpdateContext = true;
             }
 
