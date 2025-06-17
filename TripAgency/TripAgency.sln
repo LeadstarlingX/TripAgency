@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorPresentation", "Blazo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{1E700F66-1B58-4D0C-B57B-340139216340}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontend", "FrontEnd\frontend.esproj", "{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,12 @@ Global
 		{1E700F66-1B58-4D0C-B57B-340139216340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E700F66-1B58-4D0C-B57B-340139216340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E700F66-1B58-4D0C-B57B-340139216340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54FCBEFE-4898-438F-9DA0-2FF2C96535B0}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,6 +24,7 @@ namespace Application
             services.AddAutoMapper(typeof(PaymentProfile).Assembly);
 
 
+
             return services;
         }
     }
