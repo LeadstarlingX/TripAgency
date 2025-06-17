@@ -5,7 +5,7 @@ using Application.DTOs.Posts;
 using Application.DTOs.PostType;
 using Application.DTOs.SeoMetaData;
 using Application.DTOs.SeoMetaDataDto;
-using Application.IApplicationServices.SeoMetaData;
+using Application.IApplicationServices;
 using Application.Serializer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
