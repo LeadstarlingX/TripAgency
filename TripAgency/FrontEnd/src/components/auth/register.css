@@ -1,8 +1,9 @@
 .auth-container {
     max-width: 400px;
-    margin: 2rem auto;
+    margin: 4rem auto;
     padding: 2rem;
     border-radius: 8px;
+    background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
