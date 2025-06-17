@@ -6,15 +6,14 @@ import './addCar.css'; // Optional styling file
 const AddCar = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        model: '',
-        capacity: 0,
-        color: '',
-        image: '',
-        categoryId: 0,
-        carStatus: 0,
-        pph: 0,
-        ppd: 0,
-        mbw: 0
+        Model: '',
+        Capacity: 0,
+        Color: '',
+        CategoryId: 0,
+        CarStatus: 0,
+        Pph: 0,
+        Ppd: 0,
+        Mbw: 0
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -23,7 +22,7 @@ const AddCar = () => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'model' || name === 'color' || name === 'image'
+            [name]: name === 'Model' || name === 'Color'
                 ? value
                 : parseInt(value)
         }));
@@ -35,7 +34,22 @@ const AddCar = () => {
         setSuccess('');
 
         try {
-            const response = await api.post('/Car/CreateCar', formData);
+            const formDataToSend = new FormData();
+
+            // Append the image file
+            formDataToSend.append('ImageFile', selectedFile);
+
+            // Append all form data with exact DTO property names
+            Object.keys(formData).forEach(key => {
+                formDataToSend.append(key, formData[key].toString());
+            });
+
+            const response = await api.post('/Car/CreateCar', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
             if (response.data.Success) {
                 setSuccess('Car added successfully!');
                 setTimeout(() => navigate('/'), 2000); // Redirect to home after 2 seconds
@@ -43,8 +57,10 @@ const AddCar = () => {
                 setError(response.data.Message || 'Failed to add car');
             }
         } catch (err) {
-            console.error('Error adding car:', err);
-            setError('Failed to connect to server');
+            console.error('Error:', err);
+            setError(err.response?.data?.Message || err.message || 'Failed to add car');
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -54,104 +70,131 @@ const AddCar = () => {
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
 
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Model:</label>
-                    <input
-                        type="text"
-                        name="model"
-                        value={formData.model}
-                        onChange={handleChange}
-                        required
-                    />
+            <form onSubmit={handleSubmit} className="two-column-form" encType="multipart/form-data">
+                <div className="form-column">
+                    <div className="form-group">
+                        <label>Model:</label>
+                        <input
+                            type="text"
+                            name="Model"
+                            value={formData.Model}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Capacity:</label>
+                        <input
+                            type="number"
+                            name="Capacity"
+                            value={formData.Capacity}
+                            onChange={handleChange}
+                            min="1"
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Color:</label>
+                        <select
+                            name="Color"
+                            value={formData.Color}
+                            onChange={handleChange}
+                            required
+                            className="color-select"
+                        >
+                            <option value="">Select a color</option>
+                            {standardColors.map(color => (
+                                <option key={color} value={color}>
+                                    {color}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Category:</label>
+                        {loadingCategories ? (
+                            <p>Loading categories...</p>
+                        ) : (
+                            <select
+                                name="CategoryId"
+                                value={formData.CategoryId}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select a category</option>
+                                {categories.map(category => (
+                                    <option key={category.Id} value={category.Id}>
+                                        {category.Title}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label>Capacity:</label>
-                    <input
-                        type="number"
-                        name="capacity"
-                        value={formData.capacity}
-                        onChange={handleChange}
-                        required
-                    />
+                <div className="form-column">
+                    <div className="form-group">
+                        <label>Status:</label>
+                        <select
+                            name="CarStatus"
+                            value={formData.CarStatus}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value={0}>Available</option>
+                            <option value={1}>Unavailable</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Price per Hour ($):</label>
+                        <input
+                            type="number"
+                            name="Pph"
+                            value={formData.Pph}
+                            onChange={handleChange}
+                            min="0"
+                            step="0.01"
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Price per Day ($):</label>
+                        <input
+                            type="number"
+                            name="Ppd"
+                            value={formData.Ppd}
+                            onChange={handleChange}
+                            min="0"
+                            step="0.01"
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Mileage (MBW):</label>
+                        <input
+                            type="number"
+                            name="Mbw"
+                            value={formData.Mbw}
+                            onChange={handleChange}
+                            min="0"
+                            required
+                        />
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label>Color:</label>
+                <div className="form-group image-upload full-width">
+                    <label>Car Image (required):</label>
                     <input
-                        type="text"
-                        name="color"
-                        value={formData.color}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Image URL:</label>
-                    <input
-                        type="text"
-                        name="image"
-                        value={formData.image}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Category ID:</label>
-                    <input
-                        type="number"
-                        name="categoryId"
-                        value={formData.categoryId}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Status (0-1):</label>
-                    <input
-                        type="number"
-                        name="carStatus"
-                        value={formData.carStatus}
-                        onChange={handleChange}
-                        min="0"
-                        max="1"
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Price per Hour:</label>
-                    <input
-                        type="number"
-                        name="pph"
-                        value={formData.pph}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Price per Day:</label>
-                    <input
-                        type="number"
-                        name="ppd"
-                        value={formData.ppd}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Mileage (MBW):</label>
-                    <input
-                        type="number"
-                        name="mbw"
-                        value={formData.mbw}
-                        onChange={handleChange}
+                        type="file"
+                        name="ImageFile"
+                        accept="image/*"
+                        onChange={handleFileChange}
                         required
                     />
                 </div>

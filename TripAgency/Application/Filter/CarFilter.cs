@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enum;
 
 namespace Application.Filter
 {
@@ -15,5 +16,6 @@ namespace Application.Filter
         public string? Model { get; set; }
         public int? Capacity { get; set; }
         public string? Color { get; set; }
+        public CarStatusEnum? Status { get; set; }
     }
 }

@@ -18,7 +18,7 @@ const Home = () => {
     };
 
     const handleAddCar = () => {
-        navigate('/add-car'); // Make sure this route exists in your router
+        navigate('/add-car');
     };
 
     const handleImageLoad = (carId) => {
@@ -42,10 +42,10 @@ const Home = () => {
 
         const fetchCars = async () => {
             try {
-                const response = await api.get('/Car/GetAllCars');
-                setCars(response.data.Data);
+                const response = await api.get('/Car/FilterCars?Status=0'); // Only get available cars
+                setCars(response.data.Data || []);
             } catch (err) {
-                console.log('Failed to fetch cars:' + err);
+                console.log('Failed to fetch cars:', err);
                 setError('Failed to load cars.');
             } finally {
                 setLoading(false);
@@ -82,6 +82,8 @@ const Home = () => {
                 <p>Loading cars...</p>
             ) : error ? (
                 <p className="error">{error}</p>
+            ) : cars.length === 0 ? (
+                <p>No available cars at the moment.</p>
             ) : (
                 <div className="car-grid">
                     {cars.map((car) => (
@@ -102,7 +104,6 @@ const Home = () => {
                                 <div className="car-info-line"><strong>Model:</strong> {car.Model}</div>
                                 <div className="car-info-line"><strong>Capacity:</strong> {car.Capacity}</div>
                                 <div className="car-info-line"><strong>Color:</strong> {car.Color}</div>
-                                <div className="car-info-line"><strong>Status:</strong> {car.CarStatus}</div>
                                 <div className="car-info-line"><strong>Price/Hour:</strong> ${car.Pph}</div>
                                 <div className="car-info-line"><strong>Price/Day:</strong> ${car.Ppd}</div>
                                 <div className="car-info-line"><strong>MBW:</strong> {car.Mbw}</div>
