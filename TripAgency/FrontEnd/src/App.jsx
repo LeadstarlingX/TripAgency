@@ -3,6 +3,8 @@ import { useContext } from 'react';
 import Login from './components/auth/login';
 import Register from './components/auth/register';
 import Home from './components/pages/home';
+import Book from './components/pages/Book';
+import AddCar from './components/pages/addCar';
 import './App.css';
 import { AuthProvider, AuthContext } from './AuthContext.jsx';
 
@@ -22,6 +24,12 @@ function AppRoutes() {
             />
             <Route path="/register"
                 element={!isAuthenticated ? <Register /> : <Navigate to="/register" replace />}
+            />
+            <Route path="/book"
+                element={isAuthenticated ? <Book /> : <Navigate to="/login" replace />}
+            />
+            <Route path="/add-car"
+                element={isAuthenticated ? <AddCar /> : <Navigate to="/login" replace />}
             />
         </Routes>
     );

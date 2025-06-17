@@ -1,0 +1,61 @@
+/* book.css */
+.booking-container {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="datetime-local"],
+    .form-group input[type="number"] {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input.error {
+        border-color: red;
+    }
+
+.error-text {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+}
+
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+}
+
+    .checkbox-group label {
+        font-weight: normal;
+        margin-left: 0.3rem;
+    }
+
+.book-submit-btn {
+    background-color: #32b3e8;
+    color: #111;
+    font-weight: 700;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+    .book-submit-btn:hover {
+        background-color: #0099cc;
+    }

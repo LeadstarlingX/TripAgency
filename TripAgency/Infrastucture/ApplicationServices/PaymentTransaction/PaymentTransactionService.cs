@@ -47,7 +47,7 @@ namespace Infrastructure.ApplicationServices
 
            // p.Id = createPaymentTranDto.PaymentId;
             p.BookingId = paymentDto.BookingId;
-            p.PaymentDate = DateTime.Now;
+           
             p.Notes =   $"transaction{createPaymentTranDto.PaymentId}";
             p.AmountDue -= createPaymentTranDto.Amount;
             p.AmountPaid += createPaymentTranDto.Amount;
@@ -63,7 +63,10 @@ namespace Infrastructure.ApplicationServices
             {
                 p.Status = Domain.Enum.PaymentStatusEnum.refund;
             }
-
+            if(p.Status== Domain.Enum.PaymentStatusEnum.complete)
+            {
+                p.PaymentDate= DateTime.Now;
+            }
 
             await _service.UpdatePayment(p);
             return _mapper.Map<PaymentTransactionDto>(t);
