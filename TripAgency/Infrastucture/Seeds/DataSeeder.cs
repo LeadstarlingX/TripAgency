@@ -178,10 +178,208 @@ namespace Infrastructure.Seeds
                     new Category
                     {
                         Title = "Family"
+                    },
+                    new Category
+                    {
+                        Title = "Luxury"
+                    },
+                    new Category
+                    {
+                        Title = "SUV"
+                    },
+                    new Category
+                    {
+                        Title = "Compact"
                     }
                 };
 
                 _context.Categories.AddRange(categories);
+                shouldUpdateContext = true;
+            }
+
+            // Seed Cars
+            if (!_context.Cars.Any())
+            {
+                // Get category IDs for reference
+                var vipCategory = _context.Categories.FirstOrDefault(c => c.Title == "VIP");
+                var ecoCategory = _context.Categories.FirstOrDefault(c => c.Title == "Eco");
+                var familyCategory = _context.Categories.FirstOrDefault(c => c.Title == "Family");
+                var luxuryCategory = _context.Categories.FirstOrDefault(c => c.Title == "Luxury");
+                var suvCategory = _context.Categories.FirstOrDefault(c => c.Title == "SUV");
+                var compactCategory = _context.Categories.FirstOrDefault(c => c.Title == "Compact");
+
+                var cars = new List<Car>
+                {
+                    // VIP Cars
+                    new Car
+                    {
+                        Model = "Mercedes",
+                        Capacity = 4,
+                        Color = "Black",
+                        Image = "mercedes-s-class.jpg",
+                        CategoryId = vipCategory?.Id ?? 1,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 150.00m, 
+                        Ppd = 1200.00m,
+                        Mbw = 5000.00m 
+                    },
+                    new Car
+                    {
+                        Model = "BMW",
+                        Capacity = 4,
+                        Color = "White",
+                        Image = "bmw-7-series.jpg",
+                        CategoryId = vipCategory?.Id ?? 1,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 140.00m,
+                        Ppd = 1100.00m,
+                        Mbw = 4500.00m
+                    },
+
+                    // Eco Cars
+                    new Car
+                    {
+                        Model = "Tesla",
+                        Capacity = 5,
+                        Color = "Red",
+                        Image = "tesla-model-3.jpg",
+                        CategoryId = ecoCategory?.Id ?? 2,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 80.00m,
+                        Ppd = 600.00m,
+                        Mbw = 2000.00m
+                    },
+                    new Car
+                    {
+                        Model = "Toyota Prius",
+                        Capacity = 5,
+                        Color = "Blue",
+                        Image = "toyota-prius.jpg",
+                        CategoryId = ecoCategory?.Id ?? 2,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 60.00m,
+                        Ppd = 450.00m,
+                        Mbw = 1500.00m
+                    },
+
+                    // Family Cars
+                    new Car
+                    {
+                        Model = "Honda Odyssey",
+                        Capacity = 7,
+                        Color = "Silver",
+                        Image = "honda-odyssey.jpg",
+                        CategoryId = familyCategory?.Id ?? 3,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 70.00m,
+                        Ppd = 500.00m,
+                        Mbw = 1800.00m
+                    },
+                    new Car
+                    {
+                        Model = "Toyota Sienna",
+                        Capacity = 8,
+                        Color = "Gray",
+                        Image = "toyota-sienna.jpg",
+                        CategoryId = familyCategory?.Id ?? 3,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 75.00m,
+                        Ppd = 550.00m,
+                        Mbw = 2000.00m
+                    },
+
+                    // Luxury Cars
+                    new Car
+                    {
+                        Model = "Audi A8",
+                        Capacity = 4,
+                        Color = "Black",
+                        Image = "audi-a8.jpg",
+                        CategoryId = luxuryCategory?.Id ?? 4,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 120.00m,
+                        Ppd = 900.00m,
+                        Mbw = 3000.00m
+                    },
+                    new Car
+                    {
+                        Model = "Lexus LS",
+                        Capacity = 4,
+                        Color = "White",
+                        Image = "lexus-ls.jpg",
+                        CategoryId = luxuryCategory?.Id ?? 4,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 110.00m,
+                        Ppd = 850.00m,
+                        Mbw = 2800.00m
+                    },
+
+                    // SUV Cars
+                    new Car
+                    {
+                        Model = "Toyota Highlander",
+                        Capacity = 7,
+                        Color = "Black",
+                        Image = "toyota-highlander.jpg",
+                        CategoryId = suvCategory?.Id ?? 5,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 85.00m,
+                        Ppd = 650.00m,
+                        Mbw = 2200.00m
+                    },
+                    new Car
+                    {
+                        Model = "Honda CR-V",
+                        Capacity = 5,
+                        Color = "Blue",
+                        Image = "honda-cr-v.jpg",
+                        CategoryId = suvCategory?.Id ?? 5,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 65.00m,
+                        Ppd = 480.00m,
+                        Mbw = 1600.00m
+                    },
+
+                    // Compact Cars
+                    new Car
+                    {
+                        Model = "Honda Civic",
+                        Capacity = 5,
+                        Color = "Red",
+                        Image = "honda-civic.jpg",
+                        CategoryId = compactCategory?.Id ?? 6,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 45.00m,
+                        Ppd = 320.00m,
+                        Mbw = 1000.00m
+                    },
+                    new Car
+                    {
+                        Model = "Toyota Corolla",
+                        Capacity = 5,
+                        Color = "Silver",
+                        Image = "toyota-corolla.jpg",
+                        CategoryId = compactCategory?.Id ?? 6,
+                        CarStatus = CarStatusEnum.Available,
+                        Pph = 42.00m,
+                        Ppd = 300.00m,
+                        Mbw = 900.00m
+                    },
+                    new Car
+                    {
+                        Model = "Ford Focus",
+                        Capacity = 5,
+                        Color = "White",
+                        Image = "ford-focus.jpg",
+                        CategoryId = compactCategory?.Id ?? 6,
+                        CarStatus = CarStatusEnum.NotAvailable,
+                        Pph = 40.00m,
+                        Ppd = 280.00m,
+                        Mbw = 800.00m
+                    }
+                };
+
+                _context.Cars.AddRange(cars);
                 shouldUpdateContext = true;
             }
 

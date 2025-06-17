@@ -29,7 +29,7 @@ using Application.IApplicationServices.Payment;
 using Application.IApplicationServices.Booking;
 using Application.IApplicationServices.CarBooking;
 using Infrastructure.ApplicationServices.CarBooking;
-
+using Infrastructure.BackgroundServices;
 
 namespace Infrastructure
 {
@@ -41,7 +41,8 @@ namespace Infrastructure
        services
            .AddServices()
            .AddDatabase(configuration)
-           .AddIdentityOptions();
+           .AddIdentityOptions()
+           .AddBackgroundServices();
     
 
         private static IServiceCollection AddServices(this IServiceCollection services)
@@ -62,8 +63,6 @@ namespace Infrastructure
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ICarBookingService, CarBookingService>();
-
-
 
             return services;
         }
@@ -95,6 +94,12 @@ namespace Infrastructure
             services.AddDbContext<IdentityAppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection")));
 
+            return services;
+        }
+
+        private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
+        {
+            services.AddHostedService<BookingPaymentCheckService>();
             return services;
         }
     } 
