@@ -9,7 +9,7 @@ namespace Application.DTOs.PaymentMethod
 {
     public class UpdatePaymentMethodDto:BaseDto<int>
     {
-        public string Method { get; set; } = string.Empty;
-        public string Icon { get; set; } = string.Empty;
+        public string? Method { get; set; } = string.Empty;
+        public string? Icon { get; set; } = string.Empty;
     }
 }

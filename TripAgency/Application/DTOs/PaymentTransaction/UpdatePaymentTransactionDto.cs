@@ -12,8 +12,8 @@ namespace Application.DTOs.PaymentTransaction
     public class UpdatePaymentTransactionDto:BaseDto<int>
     {
         public TransactionTypeEnum TransactionType { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime TransactionDate { get; set; }
+        public decimal? Amount { get; set; }
+        public DateTime? TransactionDate { get; set; }
       //  public Payment? Payment { get; set; } // Navigation
      //   public PaymentMethod? PaymentMethod { get; set; } // Navigat
 
