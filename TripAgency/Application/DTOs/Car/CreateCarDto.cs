@@ -1,4 +1,5 @@
 ﻿using Domain.Enum;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace Application.DTOs.Car
         public decimal Pph { get; set; } // Price per hour
         public decimal Ppd { get; set; } // Price per day
         public decimal Mbw { get; set; }
+        public IFormFile? ImageFile { get; set; }
+
     }
 }

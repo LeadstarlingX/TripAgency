@@ -12,7 +12,7 @@ namespace Application.IApplicationServices.Payment
     public  interface IPaymentService
     {
         Task<IEnumerable<PaymentDto>> GetPaymentsAsync();
-        Task<PaymentDto> GetPaymentByIdAsync(BaseDto<int> dto);
+        Task<PaymentDto> GetPaymentByIdAsync(BaseDto<int> dto, bool asNoTraking = false);
         Task<PaymentDto> CreatePaymentAsync(CreatePaymentDto createPaymentDto);
         Task<PaymentDto> UpdatePayment(UpdatePaymentDto updatePaymentDto);
         Task<PaymentDto> DeletePaymentAsync(BaseDto<int> dto);
