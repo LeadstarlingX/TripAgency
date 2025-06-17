@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
-import './addCar.css'; // Optional styling file
+import './addCar.css';
 
 const AddCar = () => {
     const navigate = useNavigate();
+    const standardColors = [
+        'Black', 'White', 'Silver', 'Gray', 'Red',
+        'Blue', 'Green', 'Yellow', 'Orange', 'Brown',
+        'Beige', 'Gold', 'Navy', 'Maroon', 'Purple'
+    ];
+
     const [formData, setFormData] = useState({
         Model: '',
         Capacity: 0,
@@ -15,8 +21,28 @@ const AddCar = () => {
         Ppd: 0,
         Mbw: 0
     });
+    const [categories, setCategories] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+    const [loadingCategories, setLoadingCategories] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/Category/GetAllCategories');
+                setCategories(response.data.Data || []);
+            } catch (err) {
+                console.error('Failed to fetch categories:', err);
+                setError('Failed to load categories');
+            } finally {
+                setLoadingCategories(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,10 +54,21 @@ const AddCar = () => {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
+
+        if (!selectedFile) {
+            setError('Please upload a car image');
+            return;
+        }
+
+        setIsUploading(true);
 
         try {
             const formDataToSend = new FormData();
@@ -52,7 +89,7 @@ const AddCar = () => {
 
             if (response.data.Success) {
                 setSuccess('Car added successfully!');
-                setTimeout(() => navigate('/'), 2000); // Redirect to home after 2 seconds
+                setTimeout(() => navigate('/'), 2000);
             } else {
                 setError(response.data.Message || 'Failed to add car');
             }
@@ -197,16 +234,29 @@ const AddCar = () => {
                         onChange={handleFileChange}
                         required
                     />
+                    <p className="file-hint">
+                        {selectedFile
+                            ? `Selected: ${selectedFile.name}`
+                            : 'No file selected'}
+                    </p>
                 </div>
 
-                <button type="submit" className="submit-btn">Add Car</button>
-                <button
-                    type="button"
-                    className="cancel-btn"
-                    onClick={() => navigate('/')}
-                >
-                    Cancel
-                </button>
+                <div className="form-actions full-width">
+                    <button
+                        type="submit"
+                        className="submit-btn"
+                        disabled={isUploading}
+                    >
+                        {isUploading ? 'Uploading...' : 'Add Car'}
+                    </button>
+                    <button
+                        type="button"
+                        className="cancel-btn"
+                        onClick={() => navigate('/')}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );
