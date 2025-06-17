@@ -11,6 +11,7 @@ using Application.Filter;
 using Application.IApplicationServices.Booking;
 using Application.IReositosy;
 using AutoMapper;
+using Domain.Enum;
 using Domain.Entities.ApplicationEntities;
 using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
