@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2.5rem;
-    padding: 1.2rem 0;
+    padding: 1.2rem 1rem;
     border-bottom: 2px solid #ddd;
     background: #fff;
     box-sizing: border-box;
@@ -29,24 +29,54 @@
 .user-info {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
-/* Red logout button */
-.logout-btn {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
+.payments-btn {
+    background-color: #9C27B0;
+    color: white;
+}
+
+.payments-btn:hover {
+    background-color: #7B1FA2;
+}
+
+/* Button Styles */
+.action-btn {
     padding: 0.6rem 1.3rem;
     border-radius: 6px;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+    border: none;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: #fff;
 }
 
     .logout-btn:hover {
         background-color: #b52a39;
+    }
+
+.bookings-btn {
+    background-color: #32b3e8;
+    color: #fff;
+}
+
+    .bookings-btn:hover {
+        background-color: #2a9fd8;
+    }
+
+.add-car-btn {
+    background-color: #28a745;
+    color: #fff;
+}
+
+    .add-car-btn:hover {
+        background-color: #218838;
     }
 
 /* --- Cards Grid --- */
@@ -247,33 +277,12 @@
         margin-top: 1rem;
         width: 100%;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
     }
 }
-
-
-.header {
-    width: 100%;
-    padding: 1.2rem 1rem; /* Added horizontal padding */
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem; /* Creates space between elements */
-}
-
-.add-car-btn {
-    background-color: #28a745; /* Green color */
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.3rem;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-    .add-car-btn:hover {
-        background-color: #218838; /* Darker green on hover */
-    }

@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
-import api from '../../api';
+import api from '../../../api';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -15,10 +15,6 @@ const Home = () => {
         localStorage.removeItem('token');
         window.dispatchEvent(new Event('storage'));
         navigate('/login', { replace: true });
-    };
-
-    const handleAddCar = () => {
-        navigate('/add-car'); // Make sure this route exists in your router
     };
 
     const handleImageLoad = (carId) => {
@@ -42,10 +38,10 @@ const Home = () => {
 
         const fetchCars = async () => {
             try {
-                const response = await api.get('/Car/GetAllCars');
-                setCars(response.data.Data);
+                const response = await api.get('/Car/FilterCars?Status=0'); // Only get available cars
+                setCars(response.data.Data || []);
             } catch (err) {
-                console.log('Failed to fetch cars:' + err);
+                console.log('Failed to fetch cars:', err);
                 setError('Failed to load cars.');
             } finally {
                 setLoading(false);
@@ -69,10 +65,28 @@ const Home = () => {
                 <h1>Available Cars</h1>
                 <div className="user-info">
                     <span className="welcome">Welcome, {firstName}</span>
-                    <button onClick={handleAddCar} className="add-car-btn">
-                        Add a Car
+                    <button
+                        onClick={() => navigate('/bookings')}
+                        className="action-btn bookings-btn"
+                    >
+                        Bookings
                     </button>
-                    <button onClick={handleLogout} className="logout-btn">
+                    <button
+                        onClick={() => navigate('/payments')}
+                        className="action-btn payments-btn"
+                    >
+                        Payments
+                    </button>
+                    <button
+                        onClick={() => navigate('/add-car')}
+                        className="action-btn add-car-btn"
+                    >
+                        Add Car
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="action-btn logout-btn"
+                    >
                         Logout
                     </button>
                 </div>
@@ -82,6 +96,8 @@ const Home = () => {
                 <p>Loading cars...</p>
             ) : error ? (
                 <p className="error">{error}</p>
+            ) : cars.length === 0 ? (
+                <p>No available cars at the moment.</p>
             ) : (
                 <div className="car-grid">
                     {cars.map((car) => (
@@ -102,7 +118,6 @@ const Home = () => {
                                 <div className="car-info-line"><strong>Model:</strong> {car.Model}</div>
                                 <div className="car-info-line"><strong>Capacity:</strong> {car.Capacity}</div>
                                 <div className="car-info-line"><strong>Color:</strong> {car.Color}</div>
-                                <div className="car-info-line"><strong>Status:</strong> {car.CarStatus}</div>
                                 <div className="car-info-line"><strong>Price/Hour:</strong> ${car.Pph}</div>
                                 <div className="car-info-line"><strong>Price/Day:</strong> ${car.Ppd}</div>
                                 <div className="car-info-line"><strong>MBW:</strong> {car.Mbw}</div>

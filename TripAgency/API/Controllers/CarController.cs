@@ -102,7 +102,7 @@ namespace API.Controllers
                     await dto.ImageFile.CopyToAsync(fileStream);
                 }
 
-                dto.Image = "/images/cars/" + fileName;
+                dto.Image = fileName;
             }
             var result = await _carService.CreateCarAsync(dto);
             if (result == null)
