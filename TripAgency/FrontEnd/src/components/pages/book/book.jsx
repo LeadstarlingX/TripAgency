@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import api from '../../api';
+import api from '../../../api';
 import './book.css'; // Import the CSS file
 
 const Book = () => {

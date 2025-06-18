@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import Login from './components/auth/login';
-import Register from './components/auth/register';
-import Home from './components/pages/home';
-import Book from './components/pages/Book';
-import AddCar from './components/pages/addCar';
+import Login from './components/auth/login/login';
+import Register from './components/auth/register/register';
+import Home from './components/pages/home/home';
+import Book from './components/pages/book/book';
+import AddCar from './components/pages/addcar/addcar';
+import Bookings from './components/pages/bookings/bookings';
+import Payments from './components/pages/payments/payments';
+//import Payment from './components/pages/payment/payment';
 import './App.css';
 import { AuthProvider, AuthContext } from './AuthContext.jsx';
 
@@ -31,6 +34,15 @@ function AppRoutes() {
             <Route path="/add-car"
                 element={isAuthenticated ? <AddCar /> : <Navigate to="/login" replace />}
             />
+            <Route path="/bookings"
+                element={isAuthenticated ? <Bookings /> : <Navigate to="/login" replace />}
+            />
+            <Route path="/payments"
+                element={isAuthenticated ? <Payments /> : <Navigate to="/login" replace />}
+            />
+            {/*<Route path="/payment"*/}
+            {/*    element={isAuthenticated ? <Payment /> : <Navigate to="/login" replace />}*/}
+            {/*/>*/}
         </Routes>
     );
 }

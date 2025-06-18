@@ -119,7 +119,10 @@ namespace Infrastructure.ApplicationServices
             }
             if (filter.Pph != null) { 
             query =query.Where(x=>x.Pph==filter.Pph);
-            
+            }
+            if (filter.Status != null)
+            {
+                query = query.Where(x => x.CarStatus == filter.Status);
             }
             return _mapper.Map<IEnumerable<CarDto>>(query);
 
