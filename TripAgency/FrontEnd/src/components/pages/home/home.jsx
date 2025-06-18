@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
-import api from '../../api';
+import api from '../../../api';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -15,10 +15,6 @@ const Home = () => {
         localStorage.removeItem('token');
         window.dispatchEvent(new Event('storage'));
         navigate('/login', { replace: true });
-    };
-
-    const handleAddCar = () => {
-        navigate('/add-car');
     };
 
     const handleImageLoad = (carId) => {
@@ -69,10 +65,28 @@ const Home = () => {
                 <h1>Available Cars</h1>
                 <div className="user-info">
                     <span className="welcome">Welcome, {firstName}</span>
-                    <button onClick={handleAddCar} className="add-car-btn">
-                        Add a Car
+                    <button
+                        onClick={() => navigate('/bookings')}
+                        className="action-btn bookings-btn"
+                    >
+                        Bookings
                     </button>
-                    <button onClick={handleLogout} className="logout-btn">
+                    <button
+                        onClick={() => navigate('/payments')}
+                        className="action-btn payments-btn"
+                    >
+                        Payments
+                    </button>
+                    <button
+                        onClick={() => navigate('/add-car')}
+                        className="action-btn add-car-btn"
+                    >
+                        Add Car
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="action-btn logout-btn"
+                    >
                         Logout
                     </button>
                 </div>
