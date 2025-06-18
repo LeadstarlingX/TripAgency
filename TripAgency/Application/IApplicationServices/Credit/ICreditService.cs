@@ -17,5 +17,7 @@ namespace Application.IApplicationServices.Credit
         Task DeleteCreditAsync(BaseDto<long> dto);
         Task<CreditsDto> GetCreditsByCustomerAsync(BaseDto<long> customerDto);
         Task<CreditsDto> GetCreditsByPaymentMethodAsync(BaseDto<int> paymentMethodDto);
+        Task<bool> DeductCreditAsync(long customerId, int paymentMethodId, decimal amount);
+        Task<bool> AddCreditAsync(long customerId, int paymentMethodId, decimal amount);
     }
 } 

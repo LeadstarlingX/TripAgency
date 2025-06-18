@@ -110,11 +110,58 @@ namespace Infrastructure.ApplicationServices.Credit
 
         public async Task<CreditsDto> GetCreditsByPaymentMethodAsync(BaseDto<int> paymentMethodDto)
         {
-            var credits = await _creditRepository.FindAsync(c => c.PaymentMethodId == paymentMethodDto.Id, false, c => c.Customer, c => c.PaymentMethod);
+            var credits = await _creditRepository.FindAsync(c => c.PaymentMethodId == paymentMethodDto.Id, false, c => c.Customer!, c => c.PaymentMethod!);
             return new CreditsDto
             {
                 Credits = credits.Select(c => _mapper.Map<CreditDto>(c)).ToList()
             };
+        }
+
+        public async Task<bool> DeductCreditAsync(long customerId, int paymentMethodId, decimal amount)
+        {
+            var credit = (await _creditRepository.FindAsync(c => c.CustomerId == customerId && c.PaymentMethodId == paymentMethodId && c.IsActive)).FirstOrDefault();
+            
+            if (credit == null)
+            {
+                throw new KeyNotFoundException($"No active credit found for customer {customerId} with payment method {paymentMethodId}");
+            }
+
+            if (credit.CreditAmount < amount)
+            {
+                throw new InvalidOperationException($"Insufficient credit. Available: {credit.CreditAmount}, Required: {amount}");
+            }
+
+            credit.CreditAmount -= amount;
+            await _creditRepository.UpdateAsync(credit);
+            return true;
+        }
+
+        public async Task<bool> AddCreditAsync(long customerId, int paymentMethodId, decimal amount)
+        {
+            // Try to find existing active credit with the same payment method
+            var existingCredit = (await _creditRepository.FindAsync(c => c.CustomerId == customerId && c.PaymentMethodId == paymentMethodId)).FirstOrDefault();
+            
+            if (existingCredit != null)
+            {
+                // Add to existing credit
+                existingCredit.CreditAmount += amount;
+                existingCredit.IsActive = true; // Reactivate if it was deactivated
+                await _creditRepository.UpdateAsync(existingCredit);
+            }
+            else
+            {
+                // Create new credit record
+                var newCredit = new Domain.Entities.ApplicationEntities.Credit
+                {
+                    CustomerId = customerId,
+                    PaymentMethodId = paymentMethodId,
+                    CreditAmount = amount,
+                    IsActive = true
+                };
+                await _creditRepository.InsertAsync(newCredit);
+            }
+            
+            return true;
         }
     }
 } 
