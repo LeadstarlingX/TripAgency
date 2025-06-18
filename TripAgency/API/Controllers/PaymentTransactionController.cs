@@ -47,7 +47,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPaymentTransactionById(BaseDto<int> dto)
+        public async Task<IActionResult> GetPaymentTransactionById([FromQuery] BaseDto<int> dto)
         {
             var paymenttransaction = await _paymenttransactionService.GetPaymentTransactionByIdAsync(dto);
             if (paymenttransaction is null)
@@ -134,7 +134,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
 
-        public async Task<IActionResult> GetTransactionForPayment(BaseDto<int> dto )
+        public async Task<IActionResult> GetTransactionForPayment([FromQuery]BaseDto<int> dto )
         { 
             var result = await _paymenttransactionService.GetPaymentTransactionForPayment(dto);
             if (result == null)
@@ -148,7 +148,7 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PaymentTransactionDto>),StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByPaymentMethod(BaseDto<int> dto)
+        public async Task<IActionResult> GetByPaymentMethod([FromQuery] BaseDto<int> dto)
         {
          var result=   _paymenttransactionService.GetPaymentTransactionDtosByMethod(dto);
            

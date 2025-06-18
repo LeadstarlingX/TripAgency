@@ -2,8 +2,8 @@
 using Application.DTOs;
 using Application.DTOs.Payment;
 using Application.DTOs.PaymentTransaction;
-using Application.IApplicationServices.Payment;
 using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Credit;
 using Application.IReositosy;
 using AutoMapper;
 using Domain.Entities.ApplicationEntities;
@@ -19,51 +19,72 @@ namespace Infrastructure.ApplicationServices
     {
 
         private readonly IAppRepository<PaymentTransaction> _paymenttransaction;
-
+        private readonly IAppRepository<Payment> _paymentRepository;
+        private readonly IAppRepository<Booking> _bookingRepository;
+        private readonly IAppRepository<Domain.Entities.ApplicationEntities.Credit> _creditRepository;
         private readonly IMapper _mapper;
+        private readonly ICreditService _creditService;
 
-        private readonly IPaymentService _service;
-        public PaymentTransactionService(IMapper mapper ,IAppRepository<PaymentTransaction>trans ,IPaymentService paymentService)
+        public PaymentTransactionService(
+            IMapper mapper, 
+            IAppRepository<PaymentTransaction> trans, 
+            IAppRepository<Payment> paymentRepository,
+            IAppRepository<Booking> bookingRepository,
+            IAppRepository<Domain.Entities.ApplicationEntities.Credit> creditRepository,
+            ICreditService creditService)
         {
             _mapper = mapper;
             _paymenttransaction = trans;
-            _service = paymentService;
+            _paymentRepository = paymentRepository;
+            _bookingRepository = bookingRepository;
+            _creditRepository = creditRepository;
+            _creditService = creditService;
         }
 
         public async Task<PaymentTransactionDto> CreatePaymentTransactionAsync(CreatePaymentTransactionDto createPaymentTranDto)
         {
-           var t = _mapper.Map<PaymentTransaction>(createPaymentTranDto);
+            var t = _mapper.Map<PaymentTransaction>(createPaymentTranDto);
             await _paymenttransaction.InsertAsync(t);
-            BaseDto<int> b = new BaseDto<int> { Id = createPaymentTranDto.PaymentId };
-            PaymentDto paymentDto = await _service.GetPaymentByIdAsync(b, true);
+            
+            // Get payment directly from repository instead of using service
+            var payment = (await _paymentRepository.FindAsync(p => p.Id == createPaymentTranDto.PaymentId)).FirstOrDefault()
+                ?? throw new KeyNotFoundException($"Payment with ID {createPaymentTranDto.PaymentId} not found");
 
-            UpdatePaymentDto payment = new UpdatePaymentDto()
+            // Handle different transaction types
+            if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Final)
             {
-                Id = createPaymentTranDto.PaymentId,              
-            };
-
-
-
-            // p.Id = createPaymentTranDto.PaymentId;
-            payment.BookingId = paymentDto.BookingId;
-
-            payment.Notes =   $"transaction{createPaymentTranDto.PaymentId}";
-            payment.AmountPaid += createPaymentTranDto.Amount;
-            if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Deposit)
+                await ProcessCreditPayment(createPaymentTranDto, payment);
+                payment.AmountPaid += createPaymentTranDto.Amount;
+                payment.Status = Domain.Enum.PaymentStatusEnum.complete;
+                payment.PaymentDate = DateTime.Now;
+            }
+            else if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Deposit)
             {
+                await ProcessCreditPayment(createPaymentTranDto, payment);
+                payment.AmountPaid += createPaymentTranDto.Amount;
                 payment.Status = Domain.Enum.PaymentStatusEnum.Pending;
             }
-            else if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Final)
+            else if (createPaymentTranDto.TransactionType == Domain.Enum.TransactionTypeEnum.Refund)
             {
-                payment.Status = Domain.Enum.PaymentStatusEnum.complete;
-            }
-            if(payment.Status== Domain.Enum.PaymentStatusEnum.complete)
-            {
-                payment.PaymentDate= DateTime.Now;
+                payment.AmountPaid -= createPaymentTranDto.Amount;
+                payment.Status = Domain.Enum.PaymentStatusEnum.refund;
+                payment.PaymentDate = DateTime.Now;
             }
 
-            await _service.UpdatePayment(payment);
-            return _mapper.Map<PaymentTransactionDto>(payment);
+            payment.Notes = $"transaction{createPaymentTranDto.PaymentId}";
+            
+            // Update payment directly using repository
+            await _paymentRepository.UpdateAsync(payment);
+            return _mapper.Map<PaymentTransactionDto>(t);
+        }
+
+        private async Task ProcessCreditPayment(CreatePaymentTransactionDto transactionDto, Payment payment)
+        {
+            // Get the booking to find the customer
+            var booking = (await _bookingRepository.FindAsync(b => b.Id == payment.BookingId)).FirstOrDefault()
+                ?? throw new KeyNotFoundException("Booking not found");
+
+            await _creditService.DeductCreditAsync(booking.CustomerId, transactionDto.PaymentMethodId, transactionDto.Amount);
         }
 
         public async Task<PaymentTransactionDto> DeletePaymentTransactionAsync(BaseDto<int> dto)
@@ -97,7 +118,7 @@ namespace Infrastructure.ApplicationServices
             return _mapper.Map<PaymentTransactionDto>(t);
         }
 
-            public  async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto)
+        public  async Task<IEnumerable<PaymentTransactionDto>> GetPaymentTransactionForPayment(BaseDto<int> dto)
         {
             var p = await _paymenttransaction.FindAsync(x => x.PaymentId == dto.Id, false, x => x.Payment!);
             return _mapper.Map<IEnumerable<PaymentTransactionDto>>(p);

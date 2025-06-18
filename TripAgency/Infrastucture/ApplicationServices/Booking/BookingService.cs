@@ -1,29 +1,47 @@
 ﻿using Application.Common;
 using Application.DTOs.Authentication;
 using Application.DTOs.Booking;
+using Application.DTOs.Payment;
+using Application.DTOs.PaymentTransaction;
 using Application.Filter;
 using Application.IApplicationServices.Booking;
+using Application.IApplicationServices.PaymentTransaction;
+using Application.IApplicationServices.Credit;
 using Application.IReositosy;
 using AutoMapper;
 using Domain.Common;
 using Domain.Enum;
 using Domain.Entities.ApplicationEntities;
-using Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Application.DTOs;
 
 public class BookingService : IBookingService
 {
     private readonly IAppRepository<Booking> _bookingRepository;
     private readonly IAppRepository<Employee> _employeeRepository;
+    private readonly IAppRepository<Payment> _paymentRepository;
+    private readonly IAppRepository<PaymentTransaction> _paymentTransactionRepository;
     private readonly IMapper _mapper;
+    private readonly IPaymentTransactionService _paymentTransactionService;
+    private readonly ICreditService _creditService;
 
-    public BookingService(IAppRepository<Booking> bookingRepository,IAppRepository<Employee> repository, IMapper mapper)
+    public BookingService(
+        IAppRepository<Booking> bookingRepository,
+        IAppRepository<Employee> repository,
+        IAppRepository<Payment> paymentRepository,
+        IAppRepository<PaymentTransaction> paymentTransactionRepository,
+        IMapper mapper,
+        IPaymentTransactionService paymentTransactionService,
+        ICreditService creditService)
     {
-
         _bookingRepository = bookingRepository;
         _mapper = mapper;
         _employeeRepository = repository;
+        _paymentRepository = paymentRepository;
+        _paymentTransactionRepository = paymentTransactionRepository;
+        _paymentTransactionService = paymentTransactionService;
+        _creditService = creditService;
     }
 
     public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto, UserProfileDto currentUser)
@@ -46,8 +64,6 @@ public class BookingService : IBookingService
         }
         var newBooking = await _bookingRepository.InsertAsync(bookingEntity);
 
-        
-
         return await GetBookingByIdAsync(new BaseDto<int> { Id = (int)newBooking.Id });
     }
 
@@ -65,16 +81,62 @@ public class BookingService : IBookingService
             throw new InvalidOperationException($"Cannot update a booking that is already '{existingBooking.Status}'.");
         }
 
+        // Check if booking is being cancelled
+        bool isBeingCancelled = updateBookingDto.Status == BookingStatusEnum.Cancelled && 
+                               existingBooking.Status != BookingStatusEnum.Cancelled;
+
         _mapper.Map(updateBookingDto, existingBooking);
         await _bookingRepository.UpdateAsync(existingBooking);
 
+        // Process refund if booking is being cancelled and has payments
+        if (isBeingCancelled)
+        {
+            await ProcessCancellationRefund(existingBooking);
+        }
+
         return await GetBookingByIdAsync(new BaseDto<int> { Id = (int)existingBooking.Id });
+    }
+
+    private async Task ProcessCancellationRefund(Booking booking)
+    {
+        var payments = await _paymentRepository.FindAsync(p => p.BookingId == booking.Id);
+        
+        if (!payments.Any())
+        {
+            return; 
+        }
+
+        foreach (var payment in payments)
+        {
+            if (payment.AmountPaid > 0)
+            {
+                var firstFinalTransaction = (await _paymentTransactionRepository.FindAsync(
+                    pt => pt.PaymentId == payment.Id && pt.TransactionType == TransactionTypeEnum.Final)).FirstOrDefault();
+
+                if (firstFinalTransaction != null)
+                {
+                    // Create one refund transaction with the total amount paid
+                    var refundTransaction = new CreatePaymentTransactionDto
+                    {
+                        PaymentId = payment.Id,
+                        PaymentMethodId = firstFinalTransaction.PaymentMethodId,
+                        TransactionType = TransactionTypeEnum.Refund,
+                        Amount = payment.AmountPaid,
+                        TransactionDate = DateTime.Now
+                    };
+
+                    await _paymentTransactionService.CreatePaymentTransactionAsync(refundTransaction);
+
+                    // Add credit back to customer's account with the total amount paid
+                    await _creditService.AddCreditAsync(booking.CustomerId, firstFinalTransaction.PaymentMethodId, payment.AmountPaid);
+                }
+            }
+        }
     }
 
     public async Task<BookingDto> GetBookingByIdAsync(BaseDto<int> id)
     {
         var booking =(await _bookingRepository.FindAsync(b => b.Id == id.Id,false, b => b.Customer!, b => b.Employee!)).FirstOrDefault();
-
 
         if (booking == null)
         {

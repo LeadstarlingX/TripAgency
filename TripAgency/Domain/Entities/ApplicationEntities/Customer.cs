@@ -12,6 +12,7 @@ namespace Domain.Entities.ApplicationEntities
         {
             Contacts = new HashSet<CustomerContact>();
             Bookings = new HashSet<Booking>();
+            Credits = new HashSet<Credit>();
         }
         public long UserId { get; set; }
         public string FirstName { get; set; } = string.Empty;
@@ -21,5 +22,6 @@ namespace Domain.Entities.ApplicationEntities
         public bool IsActive { get; set; } = true;
         public virtual ICollection<CustomerContact> Contacts { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Credit> Credits { get; set; }
     }
 }
