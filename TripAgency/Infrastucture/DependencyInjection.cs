@@ -35,7 +35,8 @@ using Application.IApplicationServices;
 using Application.IApplicationServices.PostType;
 using Application.IApplicationServices.Post;
 using Infrastructure.BackgroundServices;
-
+using Application.IApplicationServices.Credit;
+using Infrastructure.ApplicationServices.Credit;
 
 namespace Infrastructure
 {
@@ -69,8 +70,7 @@ namespace Infrastructure
             services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ICarBookingService, CarBookingService>();
-
-
+            services.AddScoped<ICreditService, CreditService>();
 
             return services;
         }

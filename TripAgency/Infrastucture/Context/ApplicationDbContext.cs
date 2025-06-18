@@ -38,7 +38,8 @@ namespace Domain.Context
         public virtual DbSet<PostTag> PostTags { get; set; }
         public virtual DbSet<PostType> PostTypes { get; set; }
         public virtual DbSet<SEOMetaData> SEOMetaDatas { get; set; }
-        public virtual DbSet<Employee> Employees { get; set; }  
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Credit> Credits { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -811,6 +812,44 @@ namespace Domain.Context
                 p.Property(p => p.KeyWords)
                 .HasColumnType("nvarchar(256)")
                 .HasColumnName("keywords")
+                .IsRequired();
+            });
+            #endregion
+
+            #region Credit
+            modelBuilder.Entity<Credit>(c =>
+            {
+                c.ToTable("Credits")
+                .HasKey(c => c.Id);
+
+                c.Property(c => c.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+
+                c.HasOne(c => c.Customer)
+                .WithMany(c => c.Credits)
+                .HasForeignKey(c => c.CustomerId);
+
+                c.HasOne(c => c.PaymentMethod)
+                .WithMany(pm => pm.Credits)
+                .HasForeignKey(c => c.PaymentMethodId);
+
+                c.Property(c => c.CustomerId)
+                .HasColumnName("customer_id")
+                .IsRequired();
+
+                c.Property(c => c.PaymentMethodId)
+                .HasColumnName("payment_method_id")
+                .IsRequired();
+
+                c.Property(c => c.CreditAmount)
+                .HasColumnName("credit_amount")
+                .HasColumnType("decimal(12,2)")
+                .IsRequired();
+
+                c.Property(c => c.IsActive)
+                .HasColumnName("is_active")
+                .HasDefaultValue(true)
                 .IsRequired();
             });
             #endregion
