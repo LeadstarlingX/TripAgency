@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.DTOs.Payment;
+using Application.Filter;
 using Application.IApplicationServices.Booking;
 using Application.IApplicationServices.Car;
 using Application.IApplicationServices.CarBooking;
@@ -9,6 +10,7 @@ using AutoMapper;
 using Domain.Entities.ApplicationEntities;
 using Domain.Enum;
 using Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +85,53 @@ namespace Infrastructure.ApplicationServices
         {
             var p = await _Repo.GetAllWithAllIncludeAsync();
             return _mapper.Map<IEnumerable<PaymentDto>>(p);
+        }
+
+        public async Task<IEnumerable<PaymentDto>> GetPaymentsByFilterAsync(PaymentFilter? filter)
+        {
+            var query = _Repo.GetAll(false, p => p.Booking!, p => p.Booking!.Customer!, p => p.Booking!.Employee!);
+
+            if (filter != null)
+            {
+                if (filter.Id.HasValue)
+                    query = query.Where(p => p.Id == filter.Id.Value);
+
+                if (filter.BookingId.HasValue)
+                    query = query.Where(p => p.BookingId == filter.BookingId.Value);
+
+                if (filter.Status.HasValue)
+                    query = query.Where(p => p.Status == filter.Status.Value);
+
+                if (filter.MinAmountDue.HasValue)
+                    query = query.Where(p => p.AmountDue >= filter.MinAmountDue.Value);
+
+                if (filter.MaxAmountDue.HasValue)
+                    query = query.Where(p => p.AmountDue <= filter.MaxAmountDue.Value);
+
+                if (filter.MinAmountPaid.HasValue)
+                    query = query.Where(p => p.AmountPaid >= filter.MinAmountPaid.Value);
+
+                if (filter.MaxAmountPaid.HasValue)
+                    query = query.Where(p => p.AmountPaid <= filter.MaxAmountPaid.Value);
+
+                if (filter.MinPaymentDate.HasValue)
+                    query = query.Where(p => p.PaymentDate >= filter.MinPaymentDate.Value);
+
+                if (filter.MaxPaymentDate.HasValue)
+                    query = query.Where(p => p.PaymentDate <= filter.MaxPaymentDate.Value);
+
+                if (!string.IsNullOrEmpty(filter.Notes))
+                    query = query.Where(p => p.Notes.Contains(filter.Notes));
+
+                if (filter.CustomerId.HasValue)
+                    query = query.Where(p => p.Booking!.CustomerId == filter.CustomerId.Value);
+
+                if (filter.EmployeeId.HasValue)
+                    query = query.Where(p => p.Booking!.Employeeid == filter.EmployeeId.Value);
+            }
+
+            var payments = await query.OrderByDescending(p => p.PaymentDate).ToListAsync();
+            return _mapper.Map<IEnumerable<PaymentDto>>(payments);
         }
 
         public async Task<PaymentDto> UpdatePayment(UpdatePaymentDto updatePaymentDto)

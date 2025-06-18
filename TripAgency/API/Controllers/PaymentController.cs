@@ -2,6 +2,7 @@
 using Application.DTOs.Actions;
 using Application.DTOs.Payment;
 using Application.DTOs.PaymentMethod;
+using Application.Filter;
 using Application.IApplicationServices.Payment;
 using Application.Serializer;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,18 @@ namespace API.Controllers
                     string.Empty));
 
         }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<List<PaymentDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPaymentsByFilter([FromQuery] PaymentFilter? filter)
+        {
+            var payments = await _paymentService.GetPaymentsByFilterAsync(filter);
+            return new RawJsonActionResult(
+                _jsonFieldsSerializer.Serialize(
+                    new ApiResponse(true, "", StatusCodes.Status200OK, payments),
+                    string.Empty));
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PaymentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -117,28 +130,7 @@ namespace API.Controllers
                     new ApiResponse(true, " updated successfully", StatusCodes.Status200OK, result),
                     string.Empty));
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     }
 
 }     
