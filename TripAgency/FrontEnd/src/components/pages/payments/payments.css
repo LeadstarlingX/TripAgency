@@ -1,7 +1,9 @@
+/* payments.css */
 .payments-container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .payments-header {
@@ -10,94 +12,202 @@
     align-items: center;
     margin-bottom: 2rem;
     flex-wrap: wrap;
+    gap: 1rem;
 }
 
+    .payments-header h1 {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+/* Filter Options */
 .filter-options {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
     .filter-options button {
         padding: 0.5rem 1rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        background: #f8f9fa;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        color: #495057;
     }
+
+        .filter-options button:hover {
+            background: #e9ecef;
+            border-color: #d0d0d0;
+        }
 
         .filter-options button.active {
             background: #32b3e8;
             color: white;
             border-color: #32b3e8;
+            box-shadow: 0 2px 5px rgba(50, 179, 232, 0.3);
         }
 
-        .filter-options button:hover {
-            background: #f5f5f5;
-        }
+            .filter-options button.active:hover {
+                background: #2a9fd8;
+                border-color: #2a9fd8;
+            }
 
-        .filter-options button.active:hover {
-            background: #2a9fd8;
-        }
-
+/* Payments List */
 .payments-list {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
 }
 
 .payment-card {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     padding: 1.5rem;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .payment-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
 .payment-info {
-    flex: 1;
+    margin-bottom: 1.5rem;
 }
 
     .payment-info h3 {
-        margin-top: 0;
-        margin-bottom: 0.5rem;
+        margin: 0 0 0.75rem 0;
+        font-size: 1.25rem;
+        color: #2c3e50;
     }
 
     .payment-info p {
-        margin: 0.3rem 0;
+        margin: 0.4rem 0;
+        color: #555;
+        font-size: 0.95rem;
     }
 
-.process-btn {
-    padding: 0.6rem 1.2rem;
+        .payment-info p strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.payment-btn {
+    padding: 0.7rem 1.3rem;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.2s;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-    .process-btn:hover {
-        background-color: #218838;
-    }
+.refund-btn {
+    background-color: #dc3545;
+}
 
+.payment-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.refund-btn:hover {
+    background-color: #c82333;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-complete {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-refund {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Error and Loading States */
 .error {
     color: #dc3545;
     padding: 1rem;
     background-color: #f8d7da;
-    border-radius: 4px;
+    border-radius: 6px;
+    border-left: 4px solid #dc3545;
 }
 
+.loading-message {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .payment-card {
+    .payments-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
     }
 
+    .payments-list {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-card {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
     .filter-options {
-        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+
+        .filter-options button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+    .payment-btn, .refund-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
     }
 }

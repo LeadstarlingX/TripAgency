@@ -8,40 +8,27 @@ const Payments = () => {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [filter, setFilter] = useState('all'); // 'all', 'pending', 'complete', 'refund'
+    const [filter, setFilter] = useState('all');
 
-    // Status mapping
     const statusMap = {
-        1: 'Pending',
-        2: 'Complete',
-        3: 'Refund',
+        0: 'Pending',
+        1: 'Complete',
+        2: 'Refund',
     };
 
     const fetchPayments = async (statusFilter) => {
         try {
             setLoading(true);
-            let endpoint = '/Payment/GetAllPayments';
+            let endpoint = '/Payment/GetPaymentsByFilter';
 
-            // Add status filter to the endpoint if not 'all'
             if (statusFilter !== 'all') {
-                let statusValue;
-                switch (statusFilter) {
-                    case 'pending':
-                        statusValue = 1;
-                        break;
-                    case 'complete':
-                        statusValue = 2;
-                        break;
-                    case 'refund':
-                        statusValue = 3;
-                        break;
-                    default:
-                        statusValue = null;
-                }
+                const statusValue = {
+                    pending: 0,
+                    complete: 1,
+                    refund: 2
+                }[statusFilter];
 
-                if (statusValue !== null) {
-                    endpoint += `?Status=${statusValue}`;
-                }
+                if (statusValue) endpoint += `?Status=${statusValue}`;
             }
 
             const response = await api.get(endpoint);
@@ -58,8 +45,12 @@ const Payments = () => {
         fetchPayments(filter);
     }, [filter]);
 
-    const handleProcessPayment = (paymentId) => {
-        navigate('/payment', { state: { paymentId } });
+    const handlePaymentAction = (payment) => {
+        if (payment.Status === 0) { // Pending payment
+            navigate('/payment', { state: { paymentId: payment.Id } });
+        } else if (payment.Status === 2) { // Refund
+            navigate('/refund', { state: { paymentId: payment.Id } });
+        }
     };
 
     return (
@@ -67,30 +58,15 @@ const Payments = () => {
             <div className="payments-header">
                 <h1>Payments</h1>
                 <div className="filter-options">
-                    <button
-                        className={filter === 'all' ? 'active' : ''}
-                        onClick={() => setFilter('all')}
-                    >
-                        All Payments
-                    </button>
-                    <button
-                        className={filter === 'pending' ? 'active' : ''}
-                        onClick={() => setFilter('pending')}
-                    >
-                        Pending
-                    </button>
-                    <button
-                        className={filter === 'complete' ? 'active' : ''}
-                        onClick={() => setFilter('complete')}
-                    >
-                        Complete
-                    </button>
-                    <button
-                        className={filter === 'refund' ? 'active' : ''}
-                        onClick={() => setFilter('refund')}
-                    >
-                        Refund
-                    </button>
+                    {['all', 'pending', 'complete', 'refund'].map((filterType) => (
+                        <button
+                            key={filterType}
+                            className={filter === filterType ? 'active' : ''}
+                            onClick={() => setFilter(filterType)}
+                        >
+                            {filterType.charAt(0).toUpperCase() + filterType.slice(1)} {filterType !== 'all' && 'Payments'}
+                        </button>
+                    ))}
                 </div>
             </div>
 
@@ -103,20 +79,20 @@ const Payments = () => {
             ) : (
                 <div className="payments-list">
                     {payments.map(payment => (
-                        <div key={payment.id} className="payment-card">
+                        <div key={payment.Id} className="payment-card">
                             <div className="payment-info">
-                                <h3>Payment #{payment.id}</h3>
-                                <p>Amount: ${payment.amount}</p>
-                                <p>Status: {statusMap[payment.status] || payment.status}</p>
-                                <p>Date: {new Date(payment.date).toLocaleDateString()}</p>
-                                <p>Method: {payment.method}</p>
+                                <h3>Payment #{payment.Id}</h3>
+                                <p>AmountPaid: ${payment.AmountPaid}</p>
+                                <p>Status: {statusMap[payment.Status] || payment.Status}</p>
+                                <p>Date: {new Date(payment.Date).toLocaleDateString()}</p>
+                                <p>Notes: {payment.Notes}</p>
                             </div>
-                            {payment.status !== 2 && ( // Show button if not complete
+                            {payment.Status !== 1 && (
                                 <button
-                                    className="process-btn"
-                                    onClick={() => handleProcessPayment(payment.id)}
+                                    className={`action-btn ${payment.Status === 2 ? 'refund-btn' : 'payment-btn'}`}
+                                    onClick={() => handlePaymentAction(payment)}
                                 >
-                                    {payment.status === 1 ? 'Process Payment' : 'Process Refund'}
+                                    {payment.Status === 1 ? 'Process Payment' : 'Process Refund'}
                                 </button>
                             )}
                         </div>

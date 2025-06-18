@@ -34,8 +34,6 @@ const Bookings = () => {
         const fetchBookings = async () => {
             try {
                 setLoading(true);
-
-                // Get employee ID from JWT token if myBookings filter is enabled
                 let employeeId = null;
                 if (filters.myBookings) {
                     const token = localStorage.getItem('token');
@@ -45,10 +43,8 @@ const Bookings = () => {
                     }
                 }
 
-                // Set status filter if confirmedOnly is enabled
                 const status = filters.confirmedOnly ? 2 : null;
 
-                // Call API with filters
                 const response = await api.get('/Booking/GetAllBookingsByFilter', {
                     params: {
                         EmployeeId: employeeId,
@@ -66,7 +62,7 @@ const Bookings = () => {
         };
 
         fetchBookings();
-    }, [filters]); // Re-fetch when filters change
+    }, [filters]);
 
     const toggleFilter = (filterName) => {
         setFilters(prev => ({
@@ -77,6 +73,12 @@ const Bookings = () => {
 
     const handlePayment = (bookingId) => {
         navigate(`/payment`, { state: { bookingId: bookingId } });
+    };
+
+    // Helper function to determine if payment button should be shown
+    const shouldShowPaymentButton = (booking) => {
+        return booking.BookingType.includes('Car') &&
+            (booking.Status === 2 || booking.Status === 3);
     };
 
     return (
@@ -122,13 +124,12 @@ const Bookings = () => {
                                 <p>Passengers: {booking.NumOfPassengers}</p>
                                 {booking.EmployeeId > 0 && <p>Assigned Employee: {booking.EmployeeId}</p>}
                             </div>
-                            {booking.BookingType.includes('Car') && (
+                            {shouldShowPaymentButton(booking) && (
                                 <button
-                                    className={`payment-btn ${booking.Status !== 1 ? 'disabled' : ''}`}
+                                    className="payment-btn"
                                     onClick={() => handlePayment(booking.Id)}
-                                    disabled={booking.Status !== 1}
                                 >
-                                    {booking.Status === 1 ? 'Make Payment' : statusEnum[booking.Status]}
+                                    Make Payment
                                 </button>
                             )}
                         </div>

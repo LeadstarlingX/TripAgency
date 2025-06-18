@@ -8,6 +8,7 @@ import AddCar from './components/pages/addcar/addcar';
 import Bookings from './components/pages/bookings/bookings';
 import Payments from './components/pages/payments/payments';
 //import Payment from './components/pages/payment/payment';
+//import Refund from './components/pages/refund/refund';
 import './App.css';
 import { AuthProvider, AuthContext } from './AuthContext.jsx';
 
@@ -42,6 +43,9 @@ function AppRoutes() {
             />
             {/*<Route path="/payment"*/}
             {/*    element={isAuthenticated ? <Payment /> : <Navigate to="/login" replace />}*/}
+            {/*/>*/}
+            {/*<Route path="/refund"*/}
+            {/*    element={isAuthenticated ? <Refund /> : <Navigate to="/login" replace />}*/}
             {/*/>*/}
         </Routes>
     );
