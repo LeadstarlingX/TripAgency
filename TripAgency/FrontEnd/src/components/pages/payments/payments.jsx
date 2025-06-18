@@ -40,7 +40,7 @@ const Payments = () => {
                 }
 
                 if (statusValue !== null) {
-                    endpoint += `?status=${statusValue}`;
+                    endpoint += `?Status=${statusValue}`;
                 }
             }
 
